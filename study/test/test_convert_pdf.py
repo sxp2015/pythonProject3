@@ -23,4 +23,4 @@ excel_merge_path = 'C:\\Users\\admin\\PycharmProjects\\pythonProject1\\study\\ex
 #                                  'street_address', 'address'], rows=20)
 
 # 合并多张Excel工作表到一个工作簿
-office.excel.merge2excel(dir_path=excel_merge_path, output_file='mege2.xlsx')
+# office.excel.merge2excel(dir_path=excel_merge_path, output_file='mege2.xlsx')
