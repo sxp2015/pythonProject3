@@ -16,6 +16,16 @@ import office
 # ppt_doc_path = 'C:\\Users\\admin\\PycharmProjects\\pythonProject1\\study\\ppt\\'
 # office.ppt.ppt2pdf(path=ppt_doc_path)
 
+# EXCEL转PDF
+excel_file_path = r'C:\Users\admin\PycharmProjects\pythonProject1\study\excel\test.xlsx'
+pdf_path = r'C:\Users\admin\PycharmProjects\pythonProject1\study\pdf\test.pdf'
+office.excel.excel2pdf(excel_path=excel_file_path, pdf_path=pdf_path)
+
+# PPT转图片
+# ppt_file_path = r'C:\Users\admin\PycharmProjects\pythonProject1\study\ppt\test.pptx'
+# output_path = r'C:\Users\admin\PycharmProjects\pythonProject1\study\ppt'
+# office.ppt.ppt2img(input_path=ppt_file_path, output_path=output_path, img_type='jpg')
+
 # 批量假数据 详细字段 https://mp.weixin.qq.com/s/xVwEjXu58WovgSi4ZTtVQw
 # office.excel.fake2excel(columns=['name_female', 'name_male', 'phone_number', 'ssn',
 #                                  'company', 'company_email', 'pystr', 'country', 'province', 'city_suffix',
@@ -50,11 +60,29 @@ import office
 # 根据内容查找文件（所有文件在一个目录下，word是搜索正文内容部分，excel是搜索精准列名，不是包含和模糊搜索，PPT也是文字部分内容）
 # 注意路径的写法，双反斜杠，还是单反斜杠，如果是单的，前面要加个r,  r 代表 raw 原始数据
 # search_path = 'C:\\Users\\admin\\PycharmProjects\\pythonProject1\\study\\demo\\search_by_content'
-# search_path2 = r'C:\Users\admin\PycharmProjects\pythonProject1\study\demo\search_by_content'
+# search_path2 = r'C:\\Users\\admin\\PycharmProjects\\pythonProject1\\study\\demo\\search_by_content'
 # office.file.search_by_content(search_path=search_path2, content='中医')
 
-# 下载图片
-url = 'https://www.baidu.com/img/pcdoodle_2a77789e1a67227122be09c5be16fe46.png'
-office.image.down4img(url=url)
+# # 下载图片
+# url = 'https://www.baidu.com/img/pcdoodle_2a77789e1a67227122be09c5be16fe46.png'
+# office.image.down4img(url=url)
+
+# 图片变成速描画
+# img_url = 'C:\\Users\\admin\\PycharmProjects\\pythonProject1\\study\\img\\test2.jpg'
+# office.image.pencil4img(input_img=img_url)
+
+# 谷歌翻译(单词，短句)
+# content = 'Python is a high-level, general-purpose programming language.'
+# office.tools.transtools(to_lang='Chinese', content=content)
 
 
+# 识别图片的二维码(有问题，待测试)
+# img_url = r'C:\Users\admin\PycharmProjects\pythonProject1\study\img\qrcode.jpg'
+# office.image.decode_qrcode(qrcode_path=img_url)
+
+# 测网速
+# img_url = r'C:\Users\admin\PycharmProjects\pythonProject1\study\img\qrcode.jpg'
+# office.tools.net_speed_test()
+
+# 随机自动生成密码 12代表密码长度
+# office.tools.passwordtools(12)
