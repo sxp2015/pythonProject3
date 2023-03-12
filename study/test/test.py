@@ -1,4 +1,5 @@
 import office
+from study.utils.get_project_path import get_root_path
 
 # word转PDF
 # word_file_path = 'C:\\Users\\admin\\PycharmProjects\\pythonProject1\\resources\\02word\\012_Word_word转pdf\\test.docx'
@@ -16,9 +17,11 @@ import office
 # ppt_doc_path = 'C:\\Users\\admin\\PycharmProjects\\pythonProject1\\study\\ppt\\'
 # office.ppt.ppt2pdf(path=ppt_doc_path)
 
+
 # EXCEL转PDF
-excel_file_path = r'C:\Users\admin\PycharmProjects\pythonProject1\study\excel\test.xlsx'
-pdf_path = r'C:\Users\admin\PycharmProjects\pythonProject1\study\pdf\test.pdf'
+PROJECT_DIR = get_root_path()
+excel_file_path = PROJECT_DIR + r'/study/excel/test.xlsx'
+pdf_path = PROJECT_DIR + r'/study/pdf/test.pdf'
 office.excel.excel2pdf(excel_path=excel_file_path, pdf_path=pdf_path)
 
 # PPT转图片
