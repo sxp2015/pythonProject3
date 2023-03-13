@@ -19,10 +19,10 @@ from study.utils.get_project_path import get_root_path
 
 
 # EXCEL转PDF
-PROJECT_DIR = get_root_path()
-excel_file_path = PROJECT_DIR + r'/study/excel/test.xlsx'
-pdf_path = PROJECT_DIR + r'/study/pdf/test.pdf'
-office.excel.excel2pdf(excel_path=excel_file_path, pdf_path=pdf_path)
+# PROJECT_DIR = get_root_path()
+# excel_file_path = PROJECT_DIR + r'/study/excel/test.xlsx'
+# pdf_path = PROJECT_DIR + r'/study/pdf/test.pdf'
+# office.excel.excel2pdf(excel_path=excel_file_path, pdf_path=pdf_path)
 
 # PPT转图片
 # ppt_file_path = r'C:\Users\admin\PycharmProjects\pythonProject1\study\ppt\test.pptx'
@@ -33,6 +33,9 @@ office.excel.excel2pdf(excel_path=excel_file_path, pdf_path=pdf_path)
 # office.excel.fake2excel(columns=['name_female', 'name_male', 'phone_number', 'ssn',
 #                                  'company', 'company_email', 'pystr', 'country', 'province', 'city_suffix',
 #                                  'street_address', 'address'], rows=20)
+
+
+office.excel.fake2excel(columns=['random_int', 'name', 'province', 'job', 'random_number'], rows=200, )
 
 # 合并多张Excel工作表到一个工作簿
 # excel_doc_path = 'C:\\Users\\admin\\PycharmProjects\\pythonProject1\\study\\excel'

@@ -23,4 +23,4 @@ new_sheet.write(0, 0, '序号')
 new_sheet.write(0, 1, '标题')
 
 # 保存工作簿
-new_book.save('test_write.xlsx')
+new_book.save('test_write.xls')
