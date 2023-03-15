@@ -15,7 +15,7 @@ phoneRegex2 = re.compile(r'(?:^|\D)(1\d{10})(?:$|\D)')
 # 匹配手机呈的正则表达式
 phoneRegex3 = re.compile(r'(?:^|\D)(1[3-9]\d{9})(?:$|\D)')
 # 邮箱正则表达式
-emailRegex = re.compile(r'[a-zA-Z\d._%+-]+ @[a-zA-Z\d.-]+ (\.[a-zA-Z]{2,4})')
+emailRegex = re.compile(r'((\w\.?[a-zA-Z\d._%+-]{1,2})+@[a-zA-Z\d.-]+(\.[a-zA-Z]{2,4}))')
 
 # 获取剪切板的内容并强制文本化
 text = str(pyperclip.paste())
@@ -34,5 +34,16 @@ for groups in phoneRegex3.findall(text):
         else:
             print('No phone numbers or email addresses found.')
 
+for emails in emailRegex.findall(text):
 
+    # print('emails = ', emails)
 
+    if len(emails):
+        matches.append(emails[0])
+        # 判断数组是否为空
+        if len(matches) > 0:
+            pyperclip.copy('\n'.join(matches))
+            print('复制一行新数据到剪切板:')
+            print('\n'.join(matches))
+        else:
+            print('No  email addresses found.')
