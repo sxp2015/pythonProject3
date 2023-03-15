@@ -12,7 +12,7 @@ landlineRegex = re.compile(r'(\d{3,4}|\(\d{3,4}\))?(\s|-|\.)?(\d{7,8})')
 # ?:pattern  匹配 pattern 但不获取匹配结果，
 # \D 匹配一个非数字字符。等价于 [^0-9]。
 phoneRegex2 = re.compile(r'(?:^|\D)(1\d{10})(?:$|\D)')
-# 匹配手机呈的正则表达式
+# 匹配手机号的正则表达式
 phoneRegex3 = re.compile(r'(?:^|\D)(1[3-9]\d{9})(?:$|\D)')
 # 邮箱正则表达式
 emailRegex = re.compile(r'((\w\.?[a-zA-Z\d._%+-]{1,2})+@[a-zA-Z\d.-]+(\.[a-zA-Z]{2,4}))')
@@ -21,7 +21,7 @@ emailRegex = re.compile(r'((\w\.?[a-zA-Z\d._%+-]{1,2})+@[a-zA-Z\d.-]+(\.[a-zA-Z]
 text = str(pyperclip.paste())
 # 定义空数组存放符合条件的内容
 matches = []
-# 搜索出来符合条件的数据
+# 搜索手机号出来符合条件的数据
 for groups in phoneRegex3.findall(text):
     phoneNum = ''.join(groups)
     if len(groups) == 11:
@@ -33,10 +33,8 @@ for groups in phoneRegex3.findall(text):
             print('\n'.join(matches))
         else:
             print('No phone numbers or email addresses found.')
-
+# 搜索邮箱并提取
 for emails in emailRegex.findall(text):
-
-    # print('emails = ', emails)
 
     if len(emails):
         matches.append(emails[0])
@@ -47,3 +45,6 @@ for emails in emailRegex.findall(text):
             print('\n'.join(matches))
         else:
             print('No  email addresses found.')
+
+num = re.sub(r'hello', "你好", text)
+print("替换结果 : ", num)
