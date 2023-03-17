@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 # 函数用于路径拼接文件路径，可以传入多个路径
 # 如果不存在以‘’ / ’开始的参数，则函数会自动加上
@@ -39,10 +40,26 @@ print('2', os.path.join('aaa', './bbb', 'ccc.txt'))
 # >>> 2 aaa\./bbb\ccc.txt
 
 
-path = 'C:/yyy/yyy_data/'
-print(os.path.join(path, '/abc'))
+p1 = Path('C:/yyy/yyy_data/')
+p2 = Path.cwd()
+print(os.path.join(p1, '/abc'))
 # >>> C:/abc
 
-print(os.path.join(path, 'abc'))
+print(os.path.join(p1, 'abc'))
 # >>> C:/yyy/yyy_data/abc
 
+is_exist = p1.exists()
+is_file = p1.is_file()
+is_dir = p1.is_dir()
+
+is_exist2 = p2.exists()
+is_file2 = p2.is_file()
+is_dir2 = p2.is_dir()
+
+print('is_exist = ', is_exist)
+print('is_file = ', is_file)
+print('is_dir = ', is_dir)
+
+print('is_exist2 = ', is_exist2)
+print('is_file2 = ', is_file2)
+print('is_dir2 = ', is_dir2)

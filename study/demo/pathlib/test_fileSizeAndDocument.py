@@ -22,7 +22,28 @@ for filename in os.listdir('C:\\Windows\\System32'):
 print('totalSize', totalSize)
 
 # 获取指定目录中所有文件
-home_all_path = Path.home().glob('*')
+home_all_path = Path.cwd().glob('*')
+py_all_path = Path.cwd().glob('*.py')
+# 问号（?）代表任意单个字符：
+index_hello_path = Path.cwd().glob('hello?')
 # 放到一个列表里
 home_path_list = list(home_all_path)
-print('home_path_list', home_path_list)
+# 遍历列表
+for home_path in home_path_list:
+    # print('home_path = ', home_path)
+    print('home_path_base_name = ', os.path.basename(home_path))
+
+py_all_path_list = list(py_all_path)
+for py_path in py_all_path_list:
+    # print('list_py_path', os.listdir(Path.cwd()))
+    print('py_path_base_name = ', os.path.basename(py_path))
+
+index_hello_path_list = list(index_hello_path)
+for hello_path in index_hello_path_list:
+    # print('hello_path', hello_path)
+    print('hello_path =', os.path.basename(hello_path))
+
+# list(Path.cwd().glob('*.?x?') 返回具有任意名称和任意3个字符的扩展名的文件
+# print('home_path_list', home_path_list)
+# print('py_all_path_list', py_all_path_list)
+# print('index_hello_path_list', index_hello_path_list)
