@@ -2,6 +2,7 @@ import shutil, os
 from pathlib import Path
 
 p = Path().cwd()
+
 # shutil.copy(source, destination)， destination 是文件新名字 或新路径
 res = shutil.copy(p / 'test.txt', p / 'test2')
 # some_folder 这个文件夹必须先存在，才能复制过去
