@@ -20,3 +20,11 @@ def factorial(n):
 
 print(factorial(8))
 logging.debug('End of program')
+
+
+"""
+使用日志消息的好处在于，你可以在程序中想加多少
+就加多少，稍后只要加入一次logging.disable (logging. CRITICAL)调用就可以禁
+止日志，不像print()需逐条清除。logging模块使得显示和隐藏日志消息之间的切换变
+得很容易。
+"""
