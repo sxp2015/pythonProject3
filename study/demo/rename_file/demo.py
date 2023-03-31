@@ -12,7 +12,8 @@ import shutil, os
 from pathlib import Path
 
 # 指定要查找文件的目录
-folder = f'C:\\Users\\Administrator\\Downloads\\rename'
+# folder = f'C:\\Users\\Administrator\\Downloads\\rename'
+folder = f'C:\\Users\\admin\\Desktop\\demo'
 
 
 # 遍历指定目录下的所有文件,并重新命名
