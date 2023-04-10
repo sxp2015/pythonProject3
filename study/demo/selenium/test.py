@@ -2,7 +2,7 @@ from selenium import webdriver
 import time
 
 # 创建WebDriver对象，选择浏览器类型和对应的驱动程序
-browser = webdriver.Chrome('C:\\Program Files\\chromedriver')
+browser = webdriver.Chrome('C:\\Program Files\\chromedriver.exe')
 
 # 打开指定的页面
 browser.get('https://dict.youdao.com/')
