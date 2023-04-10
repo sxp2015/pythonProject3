@@ -1,7 +1,7 @@
 # 导入selenium和webdriver模块
 from selenium import webdriver
 
-# 创建Chrome浏览器驱动对象
+# 创建Chrome浏览器驱动对象,要把当前目录drive下的exe文件，复制到下面指定的路径中，再把下面的目录添加到环境变量中
 driver = webdriver.Chrome('C:\\Program Files\\chromedriver')
 
 # 打开网页
