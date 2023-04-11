@@ -1,14 +1,19 @@
 import openpyxl
+from openpyxl.utils import column_index_from_string, get_column_letter
 
 # 定义文件路径
 file = r'C:\Users\admin\PycharmProjects\pythonProject3\study\excel\job.xlsx'
+file2 = r'C:\Users\admin\PycharmProjects\pythonProject3\study\excel\test.xlsx'
 # 读取文件
 wb = openpyxl.open(file)
+wb2 = openpyxl.load_workbook(file2)
 # 获取工作簿的表名列表
 print('表名列表：', wb.sheetnames)
 # print('wb', type(wb))
 # 从工作簿中获取一张表
 sheet = wb['Sheet1']
+sheet2 = wb2['new_test']
+
 # 获取表的表名
 print('title = ', sheet.title)
 # 获取当前活动的表
@@ -27,6 +32,26 @@ print('查询结果：', '第%s行, 第%s列 内容是: %s' % (A1.row, A1.column
 # 获取单元格的内容(传位置参数)
 print('第一行，第二列是值是：', sheet.cell(row=1, column=2).value)
 
+# 获取指定列的位置字母或列位置数字
+letter = get_column_letter(300)
+num_letter = column_index_from_string('ABC')
+print('letter === ', letter)
+print('num_letter=== ', num_letter)
+
+# 有数值的列中，最大列数
+max_column = get_column_letter(sheet2.max_column)
+print('max_column', max_column)
+
+# 获取指定区别的值
+values = tuple(sheet2['A1':'L2'])
+print('values', values)
+
+for rowOfCellObjects in sheet2['A1':'L2']:
+    for cellObject in rowOfCellObjects:
+        print('行数:', cellObject.row, '单元格内容', cellObject.value)
+        print('列名:', cellObject.column_letter, '单元格内容', cellObject.value)
+        print('行列名:', cellObject.coordinate, '单元格内容', cellObject.value)
+    print('----END----')
 
 # 通过 for 循环遍历 1 到 7 的整数序列（步长为 2）。
 # 使用 sheet.cell(row=i, column=2) 方法获取当前表格的第 i 行、第 2 列单元格对象，并返回该单元格的值并打印输出。
