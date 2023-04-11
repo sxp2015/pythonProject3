@@ -14,6 +14,7 @@ print('表名列表：', wb.sheetnames)
 sheet = wb['Sheet1']
 sheet2 = wb2['new_test']
 
+wb2_active = wb2.active
 # 获取表的表名
 print('title = ', sheet.title)
 # 获取当前活动的表
@@ -46,12 +47,21 @@ print('max_column', max_column)
 values = tuple(sheet2['A1':'L2'])
 print('values', values)
 
+"""
+要输出这个区域中所有单元格的值，我们使用两个for循环。外层for循环遍历这个
+切片中的每一行❶。然后针对每一行，内层for循环遍历该行中的每个单元格❷。
+"""
+
 for rowOfCellObjects in sheet2['A1':'L2']:
     for cellObject in rowOfCellObjects:
         print('行数:', cellObject.row, '单元格内容', cellObject.value)
         print('列名:', cellObject.column_letter, '单元格内容', cellObject.value)
         print('行列名:', cellObject.coordinate, '单元格内容', cellObject.value)
     print('----END----')
+
+# 遍历一张表的某一列数据
+for cell_obj in list(wb2_active.columns)[1]:
+    print('cell_obj_value ==', cell_obj.value)
 
 # 通过 for 循环遍历 1 到 7 的整数序列（步长为 2）。
 # 使用 sheet.cell(row=i, column=2) 方法获取当前表格的第 i 行、第 2 列单元格对象，并返回该单元格的值并打印输出。
