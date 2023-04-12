@@ -1,6 +1,17 @@
 import openpyxl
 from openpyxl.utils import column_index_from_string, get_column_letter
 
+"""
+1．导入openpyxl模块。
+2．调用openpyxl.load_workbook()函数。
+3．取得Workbook对象。
+4．使用active或sheetnames属性。
+5．取得Worksheet对象。
+6．使用索引或工作表的cell()方法，带上row和column关键字参数。
+7．取得Cell对象。
+8．读取Cell对象的value属性。
+"""
+
 # 定义文件路径
 file = r'C:\Users\admin\PycharmProjects\pythonProject3\study\excel\job.xlsx'
 file2 = r'C:\Users\admin\PycharmProjects\pythonProject3\study\excel\test.xlsx'
