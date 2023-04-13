@@ -5,7 +5,12 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.keys import Keys
 # 导入时间用于等待
 import time
-
+"""
+browser.back()单击“返回”按钮。
+browser.forward()单击“前进”按钮。
+browser.refresh()单击“刷新”按钮。
+browser.quit()单击“关闭窗口”按钮。
+"""
 # 创建Chrome浏览器驱动对象,要把当前目录drive下的exe文件，复制到下面指定的路径中，再把下面的目录添加到环境变量中
 # 创建ChromeDriver服务对象
 driver_service = Service('C:\\Program Files\\chromedriver.exe')
