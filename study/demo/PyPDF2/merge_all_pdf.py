@@ -17,7 +17,7 @@ print('pdf files', pdfFiles)
 for filename in pdfFiles:
     pdf_file_Obj = open(pdf_files_path + '\\' + f'{filename}', 'rb')
     pdf_file_reader = PyPDF2.PdfReader(pdf_file_Obj)
-    # 遍历所有页面，除了第一页
+    # 遍历所有页面，除了第一页,如果要包含第一页，则把range(1, len(pdf_file_reader.pages)), 中的1，换成0即可
     for pageNum in range(1, len(pdf_file_reader.pages)):
         pageObj = pdf_file_reader.pages[pageNum]
         pdfWriter.add_page(pageObj)
