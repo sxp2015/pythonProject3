@@ -2,13 +2,11 @@ import openpyxl
 from openpyxl.styles import Font
 
 try:
-
-    # 使用 with 语句管理文件的打开和关闭
     wb = openpyxl.load_workbook('test_create_workbook.xlsx')
 except FileNotFoundError:
     wb = openpyxl.Workbook()
     # 创建新工作表
-    wb.create_sheet(index=0, title='First Sheet')
+    wb.create_sheet(title='First Sheet', index=0)
 
     # 激活定位到生成的当前文件
     ws = wb.active
@@ -22,22 +20,18 @@ except FileNotFoundError:
     ws['A1'].font = italic24font
 
     # 设置宽高
-    ws.row_dimensions = 30
-    ws.column_dimensions = 10
+    ws.row_dimensions[1].height = 30
+    ws.column_dimensions['A'].width = 10
 
     sumResult = 0  # 汇总数据
     lastRow = 0  # 用于记录最后一行的空白栏
-    for cell in ws.iter_rows(min_row=2, max_row=4, min_col=1, max_col=6):
-        list_cell = list(cell)
-        for index, item in enumerate(list_cell):
-            item.value = index + 1
-            sumResult += item.value
+    for row in ws.iter_rows(min_row=1, max_row=4, min_col=1, max_col=6):
+        for index, cell in enumerate(row):
+            cell.value = index + 1
+            sumResult += cell.value
             # 用于记录最后一行的空白栏
-            lastRow = index
-            # print('item', item.value)
-            # print('sum2', sumResult)
+            lastRow = cell.row
 
-    print('最后一行是', lastRow)
     # 公式求和赋值
     ws['A' + str(lastRow)].value = '合计'
     ws['B' + str(lastRow)].value = sumResult
@@ -47,6 +41,5 @@ except FileNotFoundError:
     wb.save('test_create_workbook.xlsx')
     # 输出结果
     print(wb.sheetnames)
-
 except Exception as e:
     print('出现异常:', e)

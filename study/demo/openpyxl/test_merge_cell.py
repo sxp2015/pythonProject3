@@ -1,11 +1,11 @@
 import openpyxl
 
 # 定义要操作的Excel文件名和要操作的工作表名称
-file_name = 'test_merge_workbook.xlsx'
-sheet_name = 'Sheet1'
+file_name = 'test_create_workbook.xlsx'
+sheet_name = 'hello'
 
 # 定义需要合并的单元格范围
-merge_range = 'B2:D5'
+merge_range = 'B2:D3'
 
 
 def merge_cells(file_name, sheet_name, merge_range):
@@ -25,6 +25,11 @@ def merge_cells(file_name, sheet_name, merge_range):
 
     # 合并单元格
     ws.merge_cells(merge_range)
+    # 合并后赋值
+    ws[str(eval('merge_range[1:3]'))].value = 'hello world'
+
+    # 冻结窗格
+    ws.freeze_panes('A1')
 
     # 保存文件
     wb.save(file_name)
