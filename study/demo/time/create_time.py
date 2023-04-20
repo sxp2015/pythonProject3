@@ -1,14 +1,12 @@
 import time
 
-print('当前时间：', time.time())
-
 
 def calc_prod():
     # Calculate the product of the first 100,000 numbers.
     product = 1
     for i in range(1, 100000):
         product = product * i
-        return product
+    return product
 
 
 startTime = time.time()
