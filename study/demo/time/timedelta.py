@@ -24,6 +24,21 @@ while datetime.datetime.now() < quitting_time:
 print('你的下班时间是:', quitting_time.strftime('%Y-%m-%d %H:%M:%S'), '现在时间是：',
       datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
+
+# ############ strptime函数示例 ##################
+
+# 要转换的日期时间字符串
+date_string = '2023-05-01 12:00:00'
+
+# 字符串对应的日期时间格式化字符串
+format_string = '%Y-%m-%d %H:%M:%S'
+
+# 使用 strptime() 函数将字符串转换为日期时间对象
+date_time = datetime.datetime.strptime(date_string, format_string)
+
+# 打印转换后的日期时间对象
+print(date_time)
+
 """
 datetime(year, month, day, hour=0, minute=0, second=0, microsecond=0, tzinfo=None, *, fold=0)：创建一个包含日期和时间信息的日期时间对象。
 
