@@ -13,7 +13,9 @@ startTime = time.time()
 prod = calc_prod()
 endTime = time.time()
 print('The result is %s digits long.' % (len(str(prod))))
-print('Took %s seconds to calculate.' % (endTime - startTime))
+# round()函数将按照指定的精度四舍五入一个浮点数。
+# 第二个参数，指明需要传入保留的小数位数
+print('Took %s seconds to calculate.' % round((endTime - startTime), 2))
 
 if __name__ == "__main__":
     calc_prod()
