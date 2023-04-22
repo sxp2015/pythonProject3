@@ -8,7 +8,7 @@ import get_email_attachment
 
 # 登录邮箱并选择收件箱
 mail = imaplib.IMAP4_SSL('imap.qq.com')  # 连接QQ邮箱的IMAP服务器。通过SSL保障安全连接
-mail.login('240746804@qq.com', 'exvisatltfymbhbd')  # 使用账号和授权码登录QQ邮箱
+mail.login('240746804@qq.com', 'ex******************d')  # 使用账号和授权码登录QQ邮箱
 mail.select('inbox')  # 选择收件箱
 # mail.select('信用卡账单')  # 选择收件箱
 

@@ -22,7 +22,7 @@ love_quotes = [
 love_quote = random.choice(love_quotes)
 
 sender_email = "240746804@qq.com"  # 发件人邮箱
-sender_password = "exvisatltfymbhbd"  # 发件人邮箱授权码
+sender_password = "e*************d"  # 发件人邮箱授权码
 receiver_email = "ssxxpp2015@163.com"  # 收件人邮箱地址
 
 message = MIMEText(f'亲爱的，\n\n{love_quote}\n\n邮件正文', 'plain', 'utf-8')  # 邮件正文内容
