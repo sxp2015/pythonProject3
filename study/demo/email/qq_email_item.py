@@ -3,33 +3,37 @@ import email  # 加载email库，用于解析邮件内容和元数据
 import re  # 加载re库，用于替换文件名中的非法字符
 from email.header import decode_header  # 加载decode_header函数，用于解码邮件主题和发件人
 import os  # 加载os库，用于操作文件系统
-import get_email_attachment
+import pprint, chardet
 
 
 # 登录邮箱并选择收件箱
 mail = imaplib.IMAP4_SSL('imap.qq.com')  # 连接QQ邮箱的IMAP服务器。通过SSL保障安全连接
-mail.login('240746804@qq.com', 'ex******************d')  # 使用账号和授权码登录QQ邮箱
+mail.login('240746804@qq.com', 'q***********d')  # 使用账号和授权码登录QQ邮箱
 mail.select('inbox')  # 选择收件箱
 # mail.select('信用卡账单')  # 选择收件箱
 
 # 获取最新5封邮件的uid
 status, data = mail.search(None, 'ALL')  # 搜索收件箱，返回所有邮件的uid列表
 mail_ids = data[0].split()  # 将uid列表转换为字符串，并在逗号处分割字符串为单个的uid
-latest_mail_ids = mail_ids[-10:]  # 获取最新的5封邮件的uid
+latest_mail_ids = mail_ids[-2:]  # 获取最新的1封邮件的uid
 
 # 循环读取每个邮件的内容
 for mail_id in latest_mail_ids:
     status, data = mail.fetch(mail_id, '(RFC822)')  # 获取指定uid的邮件内容和元数据
+    rawMessages = mail.fetch(mail_id, 'BODY[]')
     msg = email.message_from_bytes(data[0][1])  # 解析邮件内容
+    pprint.pprint(msg)
 
     # 解析邮件主题和发件人
     subject = decode_header(msg['Subject'])[0][0]  # 解码邮件主题并取出第一个元素
     if isinstance(subject, bytes):
-        subject = subject.decode('utf-8')  # 如果subject是bytes类型，就将其解码为utf-8编码的字符串
+        subject_encoding = chardet.detect(subject)["encoding"]
+        subject = subject.decode(subject_encoding, errors='ignore')  # 如果subject是bytes类型，就将其解码为utf-8编码的字符串
     sender = decode_header(msg['From'])[0][0]  # 解码发件人并取出第一个元素
     if isinstance(sender, bytes):
         try:
-            sender = sender.decode('utf-8')
+            sender_encoding = chardet.detect(sender)["encoding"]
+            sender = sender.decode(sender_encoding, errors='ignore')
         except UnicodeDecodeError:
             sender = sender.decode('gbk', 'ignore')  # 使用gbk编码进行解码，并忽略无法解码的字符
 
