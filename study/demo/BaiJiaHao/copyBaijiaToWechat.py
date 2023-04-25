@@ -33,7 +33,7 @@ input_userName = browser.find_element("id", "TANGRAM__PSP_4__userName")
 input_password = browser.find_element("id", "TANGRAM__PSP_4__password")
 button_submit = browser.find_element("id", "TANGRAM__PSP_4__submit")
 input_userName.send_keys("风车百科")
-input_password.send_keys("sunny19870410")
+input_password.send_keys("s..........0")
 button_submit.click()
 
 # 等待滑块验证完成切换界面
@@ -53,12 +53,13 @@ time.sleep(3)
 BJ_NeiRongGuanLi = 'img/BJ_NeiRongGuanLi.png'
 BJ_NeiRongGuanLi2 = 'img/BJ_NeiRongGuanLi2.png'
 BJ_XiuGai = 'img/BJ_xiugai.png'
+WX_GongZhongHao = 'img/WX_GongZhongHao.png'
 
 # 在截图中查找指定的图片
 locateBJ_NeiRongGuanLi = pyautogui.locateOnScreen(BJ_NeiRongGuanLi)
 locateBJ_NeiRongGuanLi2 = pyautogui.locateOnScreen(BJ_NeiRongGuanLi2)
 image_location = locateBJ_NeiRongGuanLi if locateBJ_NeiRongGuanLi else locateBJ_NeiRongGuanLi2
-
+locate_WX_GongZhongHao = pyautogui.locateOnScreen(WX_GongZhongHao)
 # 如果找到了图片，则输出图片的位置
 if image_location:
 
@@ -97,6 +98,10 @@ if image_location:
         time.sleep(1)
         # 快捷键复制
         pyautogui.hotkey('ctrl', 'c')
+        # 休息一秒
+        time.sleep(1)
+        pyautogui.moveTo(600, 15, 0.5)
+        pyautogui.click()
 
     # 测试执行完成后不关闭浏览器
     # input('Press any key to quit...')
