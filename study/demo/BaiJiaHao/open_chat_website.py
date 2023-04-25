@@ -23,7 +23,7 @@ options.add_argument("--start-maximized")  # 最大化窗口
 service = Service(chrome_driver_path)
 driver = webdriver.Chrome(service=service, options=options)
 try:
-    driver.get("https://random1.aichatos.com/#/chat/")
+    driver.get("https://chat23.yqcloud.top/#/chat/")
 
     # 等待页面加载完成
     time.sleep(2)
@@ -35,6 +35,8 @@ try:
     input_text.send_keys(question_textarea)
     time.sleep(3)
     button_submit.click()
+
+
     time.sleep(120)
 
 except Exception as e:
