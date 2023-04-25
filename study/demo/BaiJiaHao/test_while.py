@@ -33,7 +33,7 @@ input_userName = browser.find_element("id", "TANGRAM__PSP_4__userName")
 input_password = browser.find_element("id", "TANGRAM__PSP_4__password")
 button_submit = browser.find_element("id", "TANGRAM__PSP_4__submit")
 input_userName.send_keys("风车百科")
-input_password.send_keys("s.........0")
+input_password.send_keys("s.............0")
 button_submit.click()
 
 # 等待滑块验证完成切换界面
@@ -54,18 +54,20 @@ BJ_NeiRongGuanLi = 'img/BJ_NeiRongGuanLi.png'
 BJ_NeiRongGuanLi2 = 'img/BJ_NeiRongGuanLi2.png'
 BJ_XiuGai = 'img/BJ_xiugai.png'
 WX_GongZhongHao = 'img/WX_GongZhongHao.png'
+BJ_more = 'img/BJ_more.png'
 
 # 在截图中查找指定的图片
 locateBJ_NeiRongGuanLi = pyautogui.locateOnScreen(BJ_NeiRongGuanLi)
 locateBJ_NeiRongGuanLi2 = pyautogui.locateOnScreen(BJ_NeiRongGuanLi2)
-image_location = locateBJ_NeiRongGuanLi if locateBJ_NeiRongGuanLi else locateBJ_NeiRongGuanLi2
+BJ_NeiRongGuanLi_location = locateBJ_NeiRongGuanLi if locateBJ_NeiRongGuanLi else locateBJ_NeiRongGuanLi2
 locate_WX_GongZhongHao = pyautogui.locateOnScreen(WX_GongZhongHao)
-# 如果找到了图片，则输出图片的位置
-if image_location:
 
-    print('识别图片位置成功:', image_location)
+# 如果找到了图片，则输出图片的位置
+if BJ_NeiRongGuanLi_location:
+
+    print('识别图片位置成功:', BJ_NeiRongGuanLi_location)
     # 点击识别成功的坐标
-    pyautogui.click(image_location)
+    pyautogui.click(BJ_NeiRongGuanLi_location)
     # 等待内容数据显示出来
     time.sleep(8)
     # 移动到更多
@@ -76,50 +78,53 @@ if image_location:
     dropdown = browser.find_element(By.CLASS_NAME, 'cheetah-popover-inner-content')
     # 如果没有增加商品这个选项的样式，说明是文章内容
     # 输出文本
-    print('选项文字内容：', dropdown.text)
+    # print('选项文字内容：', dropdown.text)
 
-    if dropdown.text.startswith('详细数据'):
-        print('这项是视频')
-        while True:
-            pyautogui.moveTo(1300, 455, 0.25)
-            time.sleep(0.5)
-            position = pyautogui.position()
-            pyautogui.moveTo(1300, position.y + 180, 0.25)
-            time.sleep(0.5)
-            pyautogui.moveTo(1230, position.y + 180, 0.25)
-            time.sleep(0.5)
-            pyautogui.scroll(-85)
-            if not dropdown.text.startswith('详细数据'):
-                break
+    while True:
+        if dropdown:
+            if dropdown.text.startswith('详细数据'):
+                print('这项是视频')
+                while True:
+                    pyautogui.moveTo(1300, 455, 0.25)
+                    time.sleep(0.5)
+                    target = pyautogui.locateOnScreen('img/BJ_more.png')
+                    if target:
+                        target_center = pyautogui.center(target)
+                        pyautogui.moveTo(target_center)
+                        pyautogui.scroll(-75)
+                        time.sleep(0.5)
+                        pyautogui.moveTo(1230, 455, 0.25)
+                        time.sleep(0.5)
+                        new_dropdown = browser.find_element(By.CLASS_NAME, 'cheetah-popover-inner-content')
+                        if new_dropdown and new_dropdown != dropdown:
+                            dropdown = new_dropdown
+                            if dropdown.text.startswith('详细数据'):
+                                print('这项是视频')
+                                continue
+                            else:
+                                print('这是一篇文章')
+                                break
+                        else:
+                            continue
 
+            else:
+                print('这是一篇文章')
+                locate_BJ_XiuGai = pyautogui.locateOnScreen(BJ_XiuGai)
+                time.sleep(1)
+                pyautogui.click(locate_BJ_XiuGai)
+                time.sleep(5)
+                pyautogui.moveTo(260, 350, 0.5)
+                pyautogui.click()
+                pyautogui.hotkey('ctrl', 'a')
+                time.sleep(1)
+                pyautogui.hotkey('ctrl', 'c')
+                time.sleep(1)
+                pyautogui.moveTo(600, 15, 0.5)
+                pyautogui.click()
 
-    else:
-        print('这是一篇文章')
-        locate_BJ_XiuGai = pyautogui.locateOnScreen(BJ_XiuGai)
-        # 等待识别完修改按钮
-        time.sleep(1)
-        # 点击识别成功的修改按钮
-        pyautogui.click(locate_BJ_XiuGai)
-        # 等待文章内容页面显示出来
-        time.sleep(5)
-        # 获取文章标题
-        pyautogui.moveTo(260, 350, 0.5)
-        pyautogui.click()
-        # 快捷键全选
-        pyautogui.hotkey('ctrl', 'a')
-        # 休息一秒
-        time.sleep(1)
-        # 快捷键复制
-        pyautogui.hotkey('ctrl', 'c')
-        # 休息一秒
-        time.sleep(1)
-        pyautogui.moveTo(600, 15, 0.5)
-        pyautogui.click()
-
+        else:
+            print('没有找到下拉框')
+            break
     # 测试执行完成后不关闭浏览器
     # input('Press any key to quit...')
     # browser.quit()
-    time.sleep(1000)
-else:
-    time.sleep(1000)
-    print('识别图片位置失败.')
