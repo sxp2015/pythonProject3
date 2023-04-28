@@ -1,4 +1,5 @@
 import requests
+import re
 
 data = {
     'name': 'germey',
@@ -8,7 +9,11 @@ data = {
 r = requests.get('https://www.baidu.com')
 r2 = requests.get('https://www.httpbin.org/get', params=data)
 
+r3 = requests.get('https://dog.ceo/')
+pattern = re.compile('<h2.*?>(.*?)</h2>', re.S)
+titles = re.findall(pattern, r3.text)
 
+print('titles =', titles)
 print('type:', type(r))
 print('status_code:', r.status_code)
 print('r.text:', type(r.text))
