@@ -11,9 +11,14 @@ ua = Faker()
 headers = {
     'User-Agent': ua.user_agent()
 }
-
+# 定义请求头
 headers2 = {
     'User-Agent': user_agent()
+}
+
+# 定义文件
+files = {
+    'file': open('favicon.ico', 'rb')
 }
 
 # 定义数据
@@ -28,9 +33,10 @@ r2 = requests.get('https://www.httpbin.org/get', params=data)
 r3 = requests.get('https://dog.ceo/')
 r4 = requests.get('https://p5.lw05.cn/favicon.ico')
 r5 = requests.get('https://p5.lw05.cn/', headers=headers)
+r6 = requests.post('https://www.httpbin.org/post', files=files)
 
+print('r6 post', r6.text)
 print('r5 headers', r5.text)
-
 
 # 写入图片
 with open('favicon.ico', 'wb') as f:
@@ -41,6 +47,9 @@ titles = re.findall(pattern, r3.text)
 
 print('titles =', titles)
 print('type:', type(r))
+print('cookies', r.cookies)
+for key, value in r.cookies.items():
+    print(key + '= ' + value)
 print('status_code:', r.status_code)
 print('r.text:', type(r.text))
 print('r.text[:100]:', r.text[:100])
