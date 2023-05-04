@@ -27,7 +27,7 @@ def scrape_index(page):
 
 #
 def parse_index(html):
-    pattern = re.compile('<a.*?href=",*?".*?class="name">')
+    pattern = re.compile('<a(.*?)href="(.*?)"(.*?)class="name">')
     items = re.findall(pattern, html)
     if not items:
         return []
