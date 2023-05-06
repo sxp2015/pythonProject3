@@ -64,11 +64,30 @@ with open('demo-01.html', 'r', encoding='utf-8') as file:
     html = file.read()
     demo01 = PyQuery(html)
     print('demo01 ==', demo01('button'))
-
+print('#######################################')
 # 把百度首面拿回来
 baidu_img_index = requests.get(BAIDU_IMG_URL).text
 baidu_img_parse = PyQuery(baidu_img_index)
 print('baidu_img_parse == ', baidu_img_parse('.bd-home-content-album-item-title'))
+print('#######################################')
+
 # 解析并遍历所有项目，得到文本内容
 for item in baidu_img_parse('.bd-home-content-album-item-title').items():
     print('item == ', item.text())
+
+print('#######################################')
+
+
+# 查找所有子孙节点
+find01 = baidu_img_parse('.bd-home-content-album').find('div')
+print('find01 ==', find01)
+print('#######################################')
+
+# 查找所有儿子节点
+children_01 = baidu_img_parse('.bd-home-content-album').children()
+print('children ==', children_01)
+print('#######################################')
+
+# 查找所有儿子节点
+parents_01 = baidu_img_parse('.bd-home-content-album-item-pic').parents()
+print('parents  ==', parents_01)
