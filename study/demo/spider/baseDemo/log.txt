@@ -1,0 +1,122 @@
+2023-05-04 20:44:20,996 - INFO: scraping https://ssr1.scrape.center//page/1 ...
+2023-05-04 20:44:21,110 - ERROR: error occurred while scraping https://ssr1.scrape.center//page/1
+Traceback (most recent call last):
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\urllib3\connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\urllib3\connectionpool.py", line 386, in _make_request
+    self._validate_conn(conn)
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\urllib3\connectionpool.py", line 1042, in _validate_conn
+    conn.connect()
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\urllib3\connection.py", line 419, in connect
+    self.sock = ssl_wrap_socket(
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\urllib3\util\ssl_.py", line 449, in ssl_wrap_socket
+    ssl_sock = _ssl_wrap_socket_impl(
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\urllib3\util\ssl_.py", line 493, in _ssl_wrap_socket_impl
+    return ssl_context.wrap_socket(sock, server_hostname=server_hostname)
+  File "D:\python3.9.12\lib\ssl.py", line 500, in wrap_socket
+    return self.sslsocket_class._create(
+  File "D:\python3.9.12\lib\ssl.py", line 1040, in _create
+    self.do_handshake()
+  File "D:\python3.9.12\lib\ssl.py", line 1309, in do_handshake
+    self._sslobj.do_handshake()
+ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1129)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\requests\adapters.py", line 489, in send
+    resp = conn.urlopen(
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\urllib3\util\retry.py", line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='ssr1.scrape.center', port=443): Max retries exceeded with url: //page/1 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1129)')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Python\2022\pythonProject3\study\demo\spider\baseDemo\demo-02.py", line 39, in scrape_page
+    response = requests.get(url)
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\requests\api.py", line 73, in get
+    return request("get", url, params=params, **kwargs)
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\requests\sessions.py", line 587, in request
+    resp = self.send(prep, **send_kwargs)
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\requests\sessions.py", line 701, in send
+    r = adapter.send(request, **kwargs)
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\requests\adapters.py", line 563, in send
+    raise SSLError(e, request=request)
+requests.exceptions.SSLError: HTTPSConnectionPool(host='ssr1.scrape.center', port=443): Max retries exceeded with url: //page/1 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1129)')))
+2023-05-04 20:44:21,122 - ERROR: program occurred error: expected string or bytes-like object
+Traceback (most recent call last):
+  File "E:\Python\2022\pythonProject3\study\demo\spider\baseDemo\demo-02.py", line 81, in <module>
+    main()
+  File "E:\Python\2022\pythonProject3\study\demo\spider\baseDemo\demo-02.py", line 75, in main
+    detail_urls = parse_index(index_html)
+  File "E:\Python\2022\pythonProject3\study\demo\spider\baseDemo\demo-02.py", line 64, in parse_index
+    items = re.findall(pattern, html)
+  File "D:\python3.9.12\lib\re.py", line 241, in findall
+    return _compile(pattern, flags).findall(string)
+TypeError: expected string or bytes-like object
+2023-05-04 20:46:01,856 - INFO: scraping https://ssr1.scrape.center//page/1 ...
+2023-05-04 20:46:01,969 - ERROR: error occurred while scraping https://ssr1.scrape.center//page/1
+Traceback (most recent call last):
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\urllib3\connectionpool.py", line 703, in urlopen
+    httplib_response = self._make_request(
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\urllib3\connectionpool.py", line 386, in _make_request
+    self._validate_conn(conn)
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\urllib3\connectionpool.py", line 1042, in _validate_conn
+    conn.connect()
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\urllib3\connection.py", line 419, in connect
+    self.sock = ssl_wrap_socket(
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\urllib3\util\ssl_.py", line 449, in ssl_wrap_socket
+    ssl_sock = _ssl_wrap_socket_impl(
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\urllib3\util\ssl_.py", line 493, in _ssl_wrap_socket_impl
+    return ssl_context.wrap_socket(sock, server_hostname=server_hostname)
+  File "D:\python3.9.12\lib\ssl.py", line 500, in wrap_socket
+    return self.sslsocket_class._create(
+  File "D:\python3.9.12\lib\ssl.py", line 1040, in _create
+    self.do_handshake()
+  File "D:\python3.9.12\lib\ssl.py", line 1309, in do_handshake
+    self._sslobj.do_handshake()
+ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1129)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\requests\adapters.py", line 489, in send
+    resp = conn.urlopen(
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    retries = retries.increment(
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\urllib3\util\retry.py", line 592, in increment
+    raise MaxRetryError(_pool, url, error or ResponseError(cause))
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='ssr1.scrape.center', port=443): Max retries exceeded with url: //page/1 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1129)')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Python\2022\pythonProject3\study\demo\spider\baseDemo\demo-02.py", line 39, in scrape_page
+    response = requests.get(url)
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\requests\api.py", line 73, in get
+    return request("get", url, params=params, **kwargs)
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\requests\sessions.py", line 587, in request
+    resp = self.send(prep, **send_kwargs)
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\requests\sessions.py", line 701, in send
+    r = adapter.send(request, **kwargs)
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\requests\adapters.py", line 563, in send
+    raise SSLError(e, request=request)
+requests.exceptions.SSLError: HTTPSConnectionPool(host='ssr1.scrape.center', port=443): Max retries exceeded with url: //page/1 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1129)')))
+2023-05-04 20:46:01,976 - ERROR: program occurred error: object of type 'NoneType' has no len()
+Traceback (most recent call last):
+  File "E:\Python\2022\pythonProject3\study\demo\spider\baseDemo\demo-02.py", line 81, in <module>
+    main()
+  File "E:\Python\2022\pythonProject3\study\demo\spider\baseDemo\demo-02.py", line 75, in main
+    detail_urls = parse_index(index_html)
+  File "E:\Python\2022\pythonProject3\study\demo\spider\baseDemo\demo-02.py", line 63, in parse_index
+    soup = BeautifulSoup(html, 'html.parser')
+  File "E:\Python\2022\pythonProject3\venv\lib\site-packages\bs4\__init__.py", line 314, in __init__
+    elif len(markup) <= 256 and (
+TypeError: object of type 'NoneType' has no len()
