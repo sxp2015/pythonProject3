@@ -4,7 +4,7 @@ from email.header import decode_header
 
 # 登录邮箱并选择收件箱
 mail = imaplib.IMAP4_SSL('imap.qq.com')
-mail.login('240746804@qq.com', 'e*************d')
+mail.login('yourselfemail@qq.com', 'e*************d')
 mail.select('inbox')
 
 # 打开txt文件，准备写入

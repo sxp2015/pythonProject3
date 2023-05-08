@@ -4,7 +4,7 @@ import os
 import chardet
 
 # 邮箱账号和授权码
-email_address = "240746804@qq.com"
+email_address = "yourselfemail@qq.com"
 email_auth_code = "e*********d"
 
 # 连接 QQ 邮箱的 IMAP 服务器

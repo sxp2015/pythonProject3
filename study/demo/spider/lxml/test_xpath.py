@@ -28,6 +28,14 @@ result7 = html_parse.xpath('//li[@class="item-0"]')
 result8 = html_parse.xpath('//li[@class="item-0"]//text()')
 result9 = html_parse.xpath('//li[@class="item-0"]/a/text()')
 result10 = html_parse.xpath('//li[@class="item-0"]/a/@href')
+
+"""
+# contains()是XPath的一个函数，用于检查一个字符串是否包含另一个字符串。
+/tag[contains(@attribute, 'substring')]
+其中，tag表示要匹配的标签名，@attribute表示要匹配的属性名，而'substring'则是要查找的子字符串。
+例如，如果我们要查找一个HTML文档中所有class属性包含'test'字符串的div标签，可以使用如下的XPath表达式：
+//div[contains(@class, 'test')]
+"""
 result11 = html_parse.xpath('//li[contains(@class,"li")]/a/text()')
 result12 = html_parse.xpath('//li[contains(@class,"li") and @name="item"]/a/text()')
 # 按序选择
