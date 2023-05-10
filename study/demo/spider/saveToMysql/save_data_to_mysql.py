@@ -27,19 +27,19 @@ import pymysql
 # db.close()
 
 # 插入数据
-db = pymysql.connect(host='127.0.0.1', user="root", password='9e2895fbe0df1d74', port=3306, db='spiders')
-cursor = db.cursor()
-
-user_id = '10002'
-user_name = 'admin2'
-user_age = 22
-
-sql = 'INSERT INTO students (id , name, age ) values (%s,%s,%s)'
-
-try:
-    cursor.execute(sql, (user_id, user_name, user_age))
-    db.commit()
-except RuntimeError:
-    db.rollback()
-
-db.close()
+# db = pymysql.connect(host='127.0.0.1', user="root", password='9e2895fbe0df1d74', port=3306, db='spiders')
+# cursor = db.cursor()
+#
+# user_id = '10002'
+# user_name = 'admin2'
+# user_age = 22
+#
+# sql = 'INSERT INTO students (id , name, age ) values (%s,%s,%s)'
+#
+# try:
+#     cursor.execute(sql, (user_id, user_name, user_age))
+#     db.commit()
+# except RuntimeError:
+#     db.rollback()
+#
+# db.close()
