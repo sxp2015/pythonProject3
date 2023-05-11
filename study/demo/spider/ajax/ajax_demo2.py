@@ -39,7 +39,7 @@ def scrape_api(url):
     """
     logging.info('正在抓取数据 %s....', url)
     try:
-        response = requests.get(url, verify=False)
+        response = requests.get(url, verify='./scrape.center.crt')
         if response.status_code == 200:
             print('response == ', response.text)
             return response.json()

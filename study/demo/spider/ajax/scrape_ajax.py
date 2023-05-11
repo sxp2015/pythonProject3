@@ -10,6 +10,7 @@
 # @IDE     : PyCharm
 import requests
 import logging
+import pymongo
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s-%(levelname)s:%(message)s')
 
@@ -18,13 +19,13 @@ DETAIL_URL = 'https://spa1.scrape.center/api/movie/{id}'
 
 LIMIT = 10
 
-TOTAL_PAGE = 10
+TOTAL_PAGE = 3
 
 
 def scrape_api(url):
     logging.info('scraping .. %s....', url)
     try:
-        response = requests.get(url, verify=False)
+        response = requests.get(url, verify='./scrape.center.crt')
         if response.status_code == 200:
             print('response == ', response.text)
             return response.json()
@@ -44,6 +45,21 @@ def scrape_detail(id):
     return scrape_api(url)
 
 
+MONGODB_CONNECTION_STRING = 'mongodb://localhost:27017'
+MONGODB_NAME = 'movies'
+MONGODB_COLLECTION_NAME = 'movies'
+
+client = pymongo.MongoClient(MONGODB_CONNECTION_STRING)
+
+db = client['movies']
+
+collection = db['movies']
+
+
+def sava_data(data):
+    collection.update_one({'name': data.get('name')}, {'$set': data}, upsert=True)
+
+
 def main():
     for page in range(1, TOTAL_PAGE + 1):
         index_data = scrape_index(page)
@@ -53,7 +69,8 @@ def main():
             id = item.get('id')
             detail_data = scrape_detail(id)
             logging.info('detail data %s', detail_data)
-            print('获取成功：', detail_data)
+            sava_data(detail_data)
+            logging.info('detail data saved successfully %s', detail_data)
 
 
 if __name__ == "__main__":
