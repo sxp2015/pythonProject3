@@ -23,7 +23,7 @@ try:
     button_submit = driver.find_element("id", "TANGRAM__PSP_4__submit")
 
     input_userName.send_keys("风车百科")
-    input_password.send_keys("s*************0")
+    input_password.send_keys("s***********0")
     time.sleep(2)
     button_submit.click()
     time.sleep(120)
