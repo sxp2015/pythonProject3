@@ -11,8 +11,15 @@ browser = webdriver.Chrome()
 
 try:
     # 加载淘宝首页
+    browser.get('https://www.baidu.com')
+    browser.get('https://cn.bing.com')
     browser.get('https://www.taobao.com')
-    # browser.get('https://www.baidu.com')
+
+    time.sleep(1)
+    browser.back()
+    time.sleep(1)
+    browser.forward()
+    # browser.close()
 
     # 通过 ID 定位搜索框，并输入要搜索的关键词 'Python'
     input_button = browser.find_element(By.ID, 'q')

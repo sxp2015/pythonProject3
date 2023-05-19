@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 
 browser = webdriver.Chrome()
 url = 'https://www.runoob.com/try/try.php?filename=jqueryui-api-droppable'
+browser.implicitly_wait(2)
 browser.get(url)
 browser.switch_to.frame('iframeResult')
 try:
