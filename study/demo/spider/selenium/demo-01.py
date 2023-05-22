@@ -82,7 +82,7 @@ def parse_detail():
 def save_data(data):
     name = data.get('name')
     data_path = f'{RESULTS_DIR}/{name}.json'
-    json.dump(data_path, open(data_path, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
+    json.dump(data, open(data_path, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
 
 
 # 定义整个爬虫的主函数
@@ -90,9 +90,9 @@ def main():
     try:
         for page in range(1, TOTAL_PAGE + 1):
             scrape_index(page)  # 抓取当前页的内容
-            detail_urls = parse_index()  # 解析当前页中所有详情页的链接
+            detail_urls = list(parse_index())  # 解析当前页中所有详情页的链接
             logging.info('details urls %s', list(detail_urls))  # 输出日志：当前页中所有详情页的链接
-            for detail_url in list(detail_urls):
+            for detail_url in detail_urls:
                 logging.info('get detail url %s', detail_url)  # 输出日志：开始抓取某个详情页
                 scrape_detail(detail_url)  # 抓取当前详情页的内容
                 detail_data = parse_detail()  # 解析当前详情页的内容
