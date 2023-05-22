@@ -1,0 +1,11 @@
+注意是Pyppeteer，不是Puppeteer，Puppeteer 是基于Nodejs的，Pyppeteer是基于Python的。
+
+Pyppeteer又是什么呢?它其实是Puppeteer 的 Python 版实现，但不是Google开发的，是由一位来自日本的工程师依据Puppeteer的一些功能开发出来的非官方版本。
+Pyppeteer的背后实际上有一个类似于Chrome的浏览器--Chromium，它执行一些动作，从而进行网页渲染。
+
+首先，介绍一下Chromium浏览器和Chrome浏览器的渊源。
+Chromium是Google为了研发Chrome启动的项目，是完全开源的。二者基于相同的源代码而构建，
+Chrome的所有新功能都会先在Chromium上实现待验证稳定后才移植到Chrome上，
+因此Chromium的版本更新频率更高，同时包含很多新功能。但作为一款独立的浏览器，
+Chromium的用户群体要小众得多。两款浏览器“同根同源”，有着同样的logo，
+只是配色不同Chromiumlogo的颜色是不同深度的蓝色，Chromelogo的颜色是蓝色，红色、黄色和绿色这4
