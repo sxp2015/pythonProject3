@@ -90,7 +90,7 @@ def main():
     try:
         for page in range(1, TOTAL_PAGE + 1):
             scrape_index(page)  # 抓取当前页的内容
-            detail_urls = list(parse_index())  # 解析当前页中所有详情页的链接
+            detail_urls = list(parse_index())  # 解析当前页中所有详情页的链接并保存为列表
             logging.info('details urls %s', list(detail_urls))  # 输出日志：当前页中所有详情页的链接
             for detail_url in detail_urls:
                 logging.info('get detail url %s', detail_url)  # 输出日志：开始抓取某个详情页
