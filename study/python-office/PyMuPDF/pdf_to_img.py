@@ -113,6 +113,7 @@ def read_excel_file(file_path):
                     and isinstance(cell.value, str)]).replace(" ", "")
 
 
+
 if __name__ == "__main__":
     # extract_images_from_pdf(PDF_FILE_PATH, IMAGES_OUTPUT_FOLDER_PATH)
     # pdf_to_excel(INPUT_PDF_FILE_PATH, EXCEL_OUTPUT_FOLDER_PATH)
