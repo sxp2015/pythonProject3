@@ -45,5 +45,8 @@ for page_num in range(pdf_document.page_count):
             # 将读取的表格数据添加到新的 DataFrame 中
             pdf_all = pd.concat([pdf_all, df], axis=0)
 
+            print('*' * 80)
+            print(pdf_all)
+
 # 将所有读取的表格数据保存到新的 CSV 文件中
 pdf_all.to_csv('all_tables.csv', index=False)
