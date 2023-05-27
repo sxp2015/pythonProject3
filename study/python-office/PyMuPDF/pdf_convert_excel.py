@@ -1,9 +1,9 @@
 # 导入必要的库
-import os            # 处理文件和目录路径相关的功能
-import fitz          # 操作 PDF 文件的库 PyMuPDF
-import io            # 读取二进制数据的库
-from PIL import Image    # 处理图片的库
-import tabula        # 读取表格数据的库
+import os  # 处理文件和目录路径相关的功能
+import fitz  # 操作 PDF 文件的库 PyMuPDF
+import io  # 读取二进制数据的库
+from PIL import Image  # 处理图片的库
+import tabula  # 读取表格数据的库
 import pandas as pd  # 处理表格数据的库
 
 # PDF 文件路径
@@ -31,7 +31,7 @@ for page_num in range(pdf_document.page_count):
             # 读取图片数据并保存为 JPEG 文件
             img_data = block[4].get_raw_data('png')
             image = Image.open(io.BytesIO(img_data))
-            image.save('image{}.jpeg'.format(page_num+1))
+            image.save('image{}.jpeg'.format(page_num + 1))
 
         # 如果文本块是一个表格
         elif block[0] == 0 and block[4]:
@@ -40,7 +40,8 @@ for page_num in range(pdf_document.page_count):
             x1, y1, x2, y2 = bbox
 
             # 使用 tabula-py 库读取表格数据
-            df: pd.DataFrame = tabula.read_pdf(pdf_file, pages=str(page_num+1), area=[y1, x1, y2, x2], output_format='dataframe', lattice=True)
+            df: pd.DataFrame = tabula.read_pdf(pdf_file, pages=str(page_num + 1), area=[y1, x1, y2, x2],
+                                               output_format='dataframe', lattice=True)
 
             # 将读取的表格数据添加到新的 DataFrame 中
             pdf_all = pd.concat([pdf_all, df], axis=0)
