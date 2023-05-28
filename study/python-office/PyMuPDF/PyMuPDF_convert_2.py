@@ -58,8 +58,12 @@ def extract_table_cells(page):
         # 提取检查部位
         if row == '1':
             check_part = rows[i - 1]
+            check_count = 0
+            if check_part:
+                check_count += 1
             table_cells.append({
-                "check_part": check_part
+                "check_part_name": check_part,
+                "check__part_count": check_count
             })
             print(f'==检查部位是==:{check_part}')
 
