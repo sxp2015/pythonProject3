@@ -40,9 +40,6 @@ def extract_table_cells(page):
     # 用于存储单元格数据和位置信息的列表
     table_cells = []
 
-    # 记录表格中的每行数据
-    row_data = []
-
     # 遍历表格数据的每一行
     for i, row in enumerate(rows):
 
@@ -55,25 +52,13 @@ def extract_table_cells(page):
             })
             print(f'house_number房号是:{house_number}, index下标索引是:{index + 1}')
 
-        # 提取检查部位
-        if row == '1':
-            check_part = rows[i - 1]
-            check_count = 0
-            if check_part:
-                check_count += 1
-            table_cells.append({
-                "check_part_name": check_part,
-                "check__part_count": check_count
-            })
-            print(f'==检查部位是==:{check_part}')
-
-        # 获取列将每一行按制表符（\t）分割成各个单元格
+        # 获取列将每一行的单元格，按制表符（\t）分割成多个单元格
 
         cells = row.strip().split("\t")
 
         # 如果该行不为空，则遍历该行中的所有单元格
         if cells:
-            row_cells = []
+
             # 获取第一行的每个单元格
             for j, cell in enumerate(cells):
                 # 使用 search_for 方法查找 PDF 中的单元格
@@ -82,19 +67,22 @@ def extract_table_cells(page):
 
                 # 如果单元格有文本的处理
                 if text_result and cell:
-                    print(f'第{page.number + 1}页,行索引号：{i + 1}，单元格文本内容是：{cell}')
-                    table_cell = {"value": cell, "page_num": page.number + 1, "row": i + 1, "column": j + 1}
-                    row_cells.append(table_cell)
-
-                table_cells.append({
-                    "value": cell,
-                    "page_num": page.number + 1,
-                    "row_cells": row_cells
-                })
+                    # print(f'第{page.number + 1}页,行索引号：{i + 1}，单元格文本内容是：{cell}')
+                    table_cell = {"value": cell, "page_num": page.number + 1, "row:": i + 1,
+                                  "column:": j + 1}
+                    table_cells.append(table_cell)
 
                 # 如果单元格有图片的处理
-                if image_result:
-                    # print(f'从第{j + 1}页中获取到的单元格的图片内容是： {image_result}')
+                if image_result and row == '1':
+                    # print('image_result', image_result)
+
+                    # 获取检查部位
+                    check_part = rows[i - 1]
+
+                    print(f'==检查部位是==:{check_part}')
+                    # 定义一个变量统计满足条件的图片有多少
+                    img_count = 0
+
                     for m, img in enumerate(image_result):
                         # 将对象转换为 Rect 类型，并获取其位置信息
                         # search_for 方法返回的结果是一个列表，其中每个元素都是一个包含四个元素的元组，
@@ -103,20 +91,23 @@ def extract_table_cells(page):
                         # 表示将第一个匹配项的四个坐标传递给 fitz.Rect 构造函数，创建一个 Rect 对象并将其赋值给 bbox 变量。
                         # 结果就是 bbox 变量包含了这个匹配项在页面上的位置和大小信息，可以用于后续的处理。
                         bbox = fitz.Rect(img[:4])
-                        # print('bbox', bbox)
+                        # 记录当前图片的索引,根据图片尺寸和大小判断是不是需要的图片
+
+                        if bbox.x1 >= 1500 and bbox.y1 >= 1100:
+                            img_count += 1
+                            print(f'==图片索引=:{m + 1},图片数量是:{img_count}')
                         # 将单元格的数据和位置信息添加到列表中
                         table_cells.append({
                             "value": f"图片{m + 1}-{img}",
                             "page_num": page.number + 1,
-                            # "left": bbox.x0,
-                            # "top": bbox.y0,
-                            # "right": bbox.x1,
-                            # "bottom": bbox.y1
+                            "check_part_name": check_part,
+                            "left": bbox.x0,
+                            "top": bbox.y0,
+                            "right": bbox.x1,
+                            "bottom": bbox.y1
                         })
 
-            # 如果该行不为空，则将该行单元格文本存储到row_data中用于计算表格有多少行
-            if row_cells:
-                row_data.append(row_cells)
+
 
     return table_cells
 
