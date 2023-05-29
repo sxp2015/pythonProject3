@@ -25,44 +25,44 @@ doc = fitz.open(pdf_file_path)
 
 # 获取PDF中所有页面的图片数量
 def get_images_count():
-    # 先找到起始页row==‘1’，作为开始点
-    start_page = None
-
     # 从开始点统计到结束点row==‘1’为止，累加所有的图片数量
-    end_page = None
-    images_count = 0
 
     for page_num, page in enumerate(doc):
         rows = page.get_text("table").split("\n")
-        print('rows:', rows)
-        if '1' in rows:
-            start_page = page_num
-            # print('start_page:', start_page)
 
-            # 遍历每一行
-            for i, row in enumerate(rows):
-                # 如果单元格图片
-                cells = row.strip().split("\t")
-                if cells:
-                    if '1' in cells:
-                        end_page = i
-                        print('标记点索引:', i)
-                        # 获取第一行的每个单元格
-                        for j, cell in enumerate(cells[:end_page]):
-                            # 使用 search_for 方法查找 PDF 中的单元格
-                            text_result = page.search_for(cell)
-                            image_result = page.get_images(cell)
-                            print('image_result', image_result)
-                            print('image_result:', len(image_result))
-                    #  print('text_result:', text_result)
+        # 遍历每一行
+        for i, row in enumerate(rows):
+            # 如果单元格图片
+            cells = row.strip().split("\t")
+            if cells and '1' in cells:
+                # 找到起始页
+                start_page = page_num + 1
+
+                # 找到结束点row==‘1’为止
+                end_page = start_page + 1
+                for j in range(i + 1, len(rows)):
+                    if '1' in rows[j].strip().split('\t'):
+                        end_page = page_num + j - i
+                        break
+
+                images_count = 0
+                # 获取开始页面和结束页面的每个单元格
+                for j, cell in enumerate(cells[:end_page], start=start_page):
+                    # 使用 search_for 方法查找 PDF 中的单元格
+                    # text_result = page.search_for(cell)
+                    image_result = page.get_images(cell)
+
+                    # 遍历图片列表，选出符合要求的图片
+                    for img in image_result:
+                        xref = img[0]
+                        pix = fitz.Pixmap(doc, xref)
+                        if pix.w >= 1500 and pix.h >= 1100:
+                            images_count += 1
+                    print(f'从第{start_page}页到，第{end_page}页，图片数量有: {len(image_result)}个,符合要求的图片有{images_count}个 ')
 
         # 如果当前页数超过总页数，则跳出循环
         if page_num >= len(doc):
             break
-
-    if start_page is None:
-        raise Exception('未找到起始页')
-
     # 从开始点统计到结束点row==‘1’为止，累加所有的图片数量
     # end_page = None
     # images_count = 0
@@ -263,5 +263,5 @@ if __name__ == "__main__":
     print('*' * 80)
     # create_extract_excel()
     image_count = get_images_count()
-    print('image_count', image_count)
+    print('返回结果：', image_count)
     # extract_table_images_and_text(pdf_file_path)
