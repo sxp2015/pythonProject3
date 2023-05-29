@@ -23,6 +23,69 @@ pdf_file_path = os.path.join('pdf_files/查验报告.pdf')
 doc = fitz.open(pdf_file_path)
 
 
+# 获取PDF中所有页面的图片数量
+def get_images_count():
+    # 先找到起始页row==‘1’，作为开始点
+    start_page = None
+
+    # 从开始点统计到结束点row==‘1’为止，累加所有的图片数量
+    end_page = None
+    images_count = 0
+
+    for page_num, page in enumerate(doc):
+        rows = page.get_text("table").split("\n")
+        print('rows:', rows)
+        if '1' in rows:
+            start_page = page_num
+            # print('start_page:', start_page)
+
+            # 遍历每一行
+            for i, row in enumerate(rows):
+                # 如果单元格图片
+                cells = row.strip().split("\t")
+                if cells:
+                    if '1' in cells:
+                        end_page = i
+                        print('标记点索引:', i)
+                        # 获取第一行的每个单元格
+                        for j, cell in enumerate(cells[:end_page]):
+                            # 使用 search_for 方法查找 PDF 中的单元格
+                            text_result = page.search_for(cell)
+                            image_result = page.get_images(cell)
+                            print('image_result', image_result)
+                            print('image_result:', len(image_result))
+                    #  print('text_result:', text_result)
+
+        # 如果当前页数超过总页数，则跳出循环
+        if page_num >= len(doc):
+            break
+
+    if start_page is None:
+        raise Exception('未找到起始页')
+
+    # 从开始点统计到结束点row==‘1’为止，累加所有的图片数量
+    # end_page = None
+    # images_count = 0
+    # for page_num, page in enumerate(doc[start_page:], start=start_page):
+    #     rows = page.get_text("table")
+    #     print('rows:', rows)
+    #     if '1' in rows:
+    #         end_page = page_num
+    #         break
+    #     image_list = page.get_images()
+    #     if image_list:
+    #         for img in image_list:
+    #             xref = img[0]
+    #             pix = fitz.Pixmap(doc, xref)
+    #             if pix.w >= 1500 and pix.h >= 1100:
+    #                 images_count += 1
+    #             pix = None
+    # if end_page is None:
+    #     raise Exception('未找到结束页')
+    #
+    # return images_count
+
+
 # 提取表格单元格中信息的方法
 def extract_table_cells(page):
     # 调用 get_text("table") 方法获取表格数据
@@ -39,7 +102,7 @@ def extract_table_cells(page):
 
     # 用于存储单元格数据和位置信息的列表
     table_cells = []
-
+    start_page = None
     # 遍历表格数据的每一行
     for i, row in enumerate(rows):
 
@@ -106,8 +169,6 @@ def extract_table_cells(page):
                             "right": bbox.x1,
                             "bottom": bbox.y1
                         })
-
-
 
     return table_cells
 
@@ -200,5 +261,7 @@ def create_extract_excel():
 if __name__ == "__main__":
     # save_images_in_pdf(pdf_file_path)
     print('*' * 80)
-    create_extract_excel()
+    # create_extract_excel()
+    image_count = get_images_count()
+    print('image_count', image_count)
     # extract_table_images_and_text(pdf_file_path)
