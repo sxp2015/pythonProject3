@@ -10,6 +10,8 @@
 # @IDE     : PyCharm
 # 导入必要的库
 import os  # 处理文件和目录路径相关的功能
+import re
+
 import fitz  # 操作 PDF 文件的库 PyMuPDF
 import io  # 读取二进制数据的库
 from PIL import Image  # 处理图片的库
@@ -32,9 +34,12 @@ def get_images_count():
 
         # 遍历每一行
         for i, row in enumerate(rows):
-            # 如果单元格图片
+            # 获取每行的所有单元格
             cells = row.strip().split("\t")
+            # print('cells:', cells)
+
             if cells and '1' in cells:
+                print(f'数字1出现在: 第{page_num + 1}页，第{i + 1}行:')
                 # 找到起始页
                 start_page = page_num + 1
 
@@ -48,8 +53,20 @@ def get_images_count():
                 images_count = 0
                 # 获取开始页面和结束页面的每个单元格
                 for j, cell in enumerate(cells[:end_page], start=start_page):
+
+                    if '1' in cell:
+                        cell_bbox = page.search_for(cell)[0]
+                        cell_rect = fitz.Rect(cell_bbox)
+                        print('cell_rect:', cell_rect)
+                        # 遍历页面所有的矩形
+                        for shape in page.get_drawings():
+                            if shape["fill"] and shape["rect"] == cell_rect:
+                                # 如果当前矩形有填充颜色，并且位置与目标单元格一致，表示找到了目标单元格
+                                cell_bg_color = tuple(map(int, shape["fill"]))
+                                print(f"Cell at {cell_rect} has background color {cell_bg_color}")
+
                     # 使用 search_for 方法查找 PDF 中的单元格
-                    # text_result = page.search_for(cell)
+
                     image_result = page.get_images(cell)
 
                     # 遍历图片列表，选出符合要求的图片
@@ -58,7 +75,7 @@ def get_images_count():
                         pix = fitz.Pixmap(doc, xref)
                         if pix.w >= 1500 and pix.h >= 1100:
                             images_count += 1
-                    print(f'从第{start_page}页到，第{end_page}页，图片数量有: {len(image_result)}个,符合要求的图片有{images_count}个 ')
+                    # print(f'从第{start_page}页到，第{end_page}页，图片数量有: {len(image_result)}个,符合要求的图片有{images_count}个 ')
 
         # 如果当前页数超过总页数，则跳出循环
         if page_num >= len(doc):
@@ -262,6 +279,6 @@ if __name__ == "__main__":
     # save_images_in_pdf(pdf_file_path)
     print('*' * 80)
     # create_extract_excel()
-    image_count = get_images_count()
-    print('返回结果：', image_count)
+
+    print('返回结果：', get_images_count())
     # extract_table_images_and_text(pdf_file_path)
