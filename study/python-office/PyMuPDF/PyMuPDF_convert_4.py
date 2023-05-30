@@ -25,6 +25,30 @@ pdf_file_path = os.path.join('pdf_files/查验报告.pdf')
 doc = fitz.open(pdf_file_path)
 
 
+# 获取图像详细信息
+def get_image_info(pixmap):
+    color_space = pixmap.colorspace
+    color_count = pixmap.color_count()
+    print('color_space:', color_space)
+    print('color_count:', color_count)
+    pixmap.save('door.png')
+    if isinstance(color_space, type(fitz.csRGB)):
+        min_val = 0
+        max_val = 255
+        print('=================')
+    elif color_space == "DeviceGray":
+        min_val = max_val = pixmap.n - 1
+    else:
+        raise ValueError(f"Unexpected color space: {color_space}")
+    print(f"颜色空间：{color_space}, 范围值：{min_val}～{max_val}")
+
+    # 获取图片中的像素点数和颜色列表
+    n_pixels = pixmap.width * pixmap.height
+    colors = [pixmap.pixel(x, y) for x in range(pixmap.width) for y in range(pixmap.height)]
+    print(f"像素点数：{n_pixels}")
+    print(f"颜色列表：{colors}")
+
+
 # 获取PDF中所有页面的图片数量
 def get_table_cells_color():
     # 打开PDF文档
@@ -34,43 +58,44 @@ def get_table_cells_color():
     # 定义颜色信息列表
     color_info_list = []
 
-    # 遍历所有页面，统计满足条件的单元格数量
-    condition_one = 0
-
     # 遍历每一页PDF页面
     for page_num, page in enumerate(doc):
-        # 页面的所有行
-        rows = page.get_text("table").split("\n")
+        # 获取所有页面的文本内容
+        rows = page.get_text().split("\n")
 
         # 遍历每一行
         for i, row in enumerate(rows):
 
-            # 得到每一行的所有单元格
+            # 获取每行的所有单元格
             cells = row.strip().split("\t")
 
             # 遍历每一行的每一个单元格
             for j, cell in enumerate(cells):
+
                 # 如果单元格中包含1,且只有一个单元格，并且不是第一页
-                # print('cell', cell)
-                if cell == '1' and len(cells) == 1 and page_num != 0:
-                    # 累加汇总一共有多少个包含1的单元格
-                    condition_one += 1
-                    # 得到上一个单元格检查部位的单元格
-                    # print('cell,', cell)
-                    if j > 0:
-                        pre_cell = cell[j - 1]
-                        print('pre_cell', pre_cell)
+                if cell == '入户门' and len(cells) == 1 and page_num != 0:
+                    # 使用 search_for() 方法查找包含"入户门"文本的单元格位置信息，并取第一个结果。
+                    cell_position = page.search_for(cell)[0]
+                    print('得到单元格的位置信息：', cell_position)
 
-                # print(f'在第{page_num + 1}页,第{i + 1}行 存在满足条件的单元格,总共有:{condition_one}个单元格')
+                    # 将找到的单元格位置信息转换为 fitz.Rect 对象，以便后续获取该单元格的颜色信息。
+                    rect = fitz.Rect(cell_position.x0, cell_position.y0, cell_position.x1, cell_position.y1)
+                    # 使用 get_pixmap() 方法获取指定范围内的图像数据，并返回 fitz.Pixmap 对象。
+                    pixmap = page.get_pixmap(matrix=fitz.Identity, colorspace=fitz.csRGB, clip=rect)
+                    print('pixmap:', pixmap)
 
-            # # 如果不是第一行
-            # if i > 0:
-            #     # 获取上一行的所有单元格
-            #     pre_row = rows[i - 1].strip().split("\t")
-            #     # 遍历上一行的每个单元格
-            #     for k in range(len(pre_row)):
-            #         pre_cell = pre_row[k]
-            #         print('pre_cell', pre_cell)
+                    # 对图片进行处理，获取图片信息
+                    get_image_info(pixmap)
+
+                    # 将图片信息加入到列表中
+                    color_info_list.append({'page_num': page_num,
+                                            'cell_position': cell_position,
+                                            'color_info': (pixmap.colorspace, pixmap.n, pixmap.width, pixmap.height)})
+
+            # print(f'在第{page_num + 1}页,第{i + 1}行 存在满足条件的单元格,总共有:{condition_one}个单元格')
+
+    # 打印颜色信息列表
+    return color_info_list
 
 
 if __name__ == "__main__":

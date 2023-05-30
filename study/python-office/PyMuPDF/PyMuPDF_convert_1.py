@@ -48,6 +48,8 @@ def extract_table_cells(page):
             for j, cell in enumerate(cells):
                 # 使用 search_for 方法查找 PDF 中的单元格
                 text_result = page.search_for(cell)
+
+                print('text_result=============', text_result)
                 image_result = page.get_images(cell)
 
                 # 如果单元格有文本的处理
