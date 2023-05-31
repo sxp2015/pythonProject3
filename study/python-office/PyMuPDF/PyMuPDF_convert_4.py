@@ -29,7 +29,7 @@ pdf_file_path = os.path.join('pdf_files/查验报告.pdf')
 doc = fitz.open(pdf_file_path)
 
 # 获取当前时间并格式化，用于保存图片命名
-dt = datetime.now().strftime("%Y%m%d_%H%M%S")
+dt = datetime.now().strftime("%Y%m%d-%H%M%S%f")
 
 
 # 获取像素图出现次数最多的颜色
@@ -67,9 +67,6 @@ def get_most_common_color(pixmap):
 
 # 获取图像详细信息,得到出现最多的颜色的RGB值,并保存为图片
 def get_image_info(cell, pixmap):
-    # 创建图片存放目录
-    if not os.path.exists("pixmap_image"):
-        os.mkdir("pixmap_image")
     # 像素图的色彩空间
     color_space = pixmap.colorspace
     # 确定使用的颜色
@@ -102,7 +99,6 @@ def get_image_info(cell, pixmap):
     # print('=' * 30)
     # 保存像素图为图片
 
-    pixmap.save(f'pixmap_image/{cell}-{dt}.png')
     if isinstance(color_space, type(fitz.csRGB)):
         min_val = 0
         max_val = 255
@@ -130,9 +126,15 @@ def get_table_cells_color():
     page_count = doc.page_count
     # 定义颜色信息列表
     color_info_list = []
+    # 创建图片存放目录
+    if not os.path.exists("pixmap_image"):
+        os.mkdir("pixmap_image")
+    # 定义目标像素RGB值
+    target_rgb = (255, 199, 0)
 
     # 遍历每一页PDF页面
     for page_num, page in enumerate(doc):
+
         # 获取所有页面的文本内容
         rows = page.get_text().split("\n")
 
@@ -144,28 +146,36 @@ def get_table_cells_color():
 
             # 遍历每一行的每一个单元格
             for j, cell in enumerate(cells):
-
+                # 定义文件存储名称
+                file_name = f'pixmap_image\\{page_num + 1}_{cell}_{dt}.png'.replace('/', '_').replace('、', '_') \
+                    .replace(' ', '_').replace('。', '_').replace('，', '_').replace('；', '_').replace(':', '_')
                 # 如果单元格中包含1,且只有一个单元格，并且不是第一页
-                if cell == '入户门' and len(cells) == 1 and page_num != 0:
-                    # 使用 search_for() 方法查找包含"入户门"文本的单元格位置信息，并取第一个结果。
-                    cell_position = page.search_for(cell)[0]
-                    # print('得到单元格的位置信息：', cell_position)
+                # if cell == '入户门' and len(cells) == 1 and page_num != 0:
+                # 使用 search_for() 方法查找包含"入户门"文本的单元格位置信息，并取第一个结果。
+                cell_position = page.search_for(cell)
+                # print('得到单元格的位置信息：', cell_position)
+                if cell_position:
+                    cell_position = cell_position[0]
+                else:
+                    continue
+                # 将找到的单元格位置信息转换为 fitz.Rect 对象，以便后续获取该单元格的颜色信息。
+                rect = fitz.Rect(cell_position.x0, cell_position.y0, cell_position.x1, cell_position.y1)
+                # 使用 get_pixmap() 方法获取指定范围内的图像数据，并返回 fitz.Pixmap 对象。
+                pixmap = page.get_pixmap(matrix=fitz.Identity, colorspace=fitz.csRGB, clip=rect)
 
-                    # 将找到的单元格位置信息转换为 fitz.Rect 对象，以便后续获取该单元格的颜色信息。
-                    rect = fitz.Rect(cell_position.x0, cell_position.y0, cell_position.x1, cell_position.y1)
-                    # 使用 get_pixmap() 方法获取指定范围内的图像数据，并返回 fitz.Pixmap 对象。
-                    pixmap = page.get_pixmap(matrix=fitz.Identity, colorspace=fitz.csRGB, clip=rect)
-                    # print('pixmap:', pixmap)
+                # 对图片进行处理，获取图片信息
+                cell_image_info = get_image_info(cell, pixmap)
 
-                    # 对图片进行处理，获取图片信息
-                    cell_image_info = get_image_info(cell, pixmap)
+                if cell_image_info and cell_image_info[0]['RGB_Color'] == (255, 199, 0):
+                    print('cell_image_info:', cell_image_info)
+                    pixmap.save(file_name)
 
-                    # 将图片信息加入到列表中
-                    color_info_list.append({'page_num': page_num,
-                                            'cell_position': cell_position,
-                                            'cell_image_info': cell_image_info,
-                                            'pixmap_width': pixmap.width,
-                                            'pixmap_height': pixmap.height})
+                # 将图片信息加入到列表中
+                color_info_list.append({'page_num': page_num,
+                                        'cell_position': cell_position,
+                                        'cell_image_info': cell_image_info,
+                                        'pixmap_width': pixmap.width,
+                                        'pixmap_height': pixmap.height})
 
             # print(f'在第{page_num + 1}页,第{i + 1}行 存在满足条件的单元格,总共有:{condition_one}个单元格')
 
