@@ -101,6 +101,7 @@ def get_image_info(cell, pixmap):
     # print('color_rgb:', color_rgb)
     # print('=' * 30)
     # 保存像素图为图片
+
     pixmap.save(f'pixmap_image/{cell}-{dt}.png')
     if isinstance(color_space, type(fitz.csRGB)):
         min_val = 0
