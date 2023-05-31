@@ -132,6 +132,9 @@ def get_table_cells_color():
     # 定义目标像素RGB值
     target_rgb = (255, 199, 0)
 
+    # 定义是否为检查部位分隔点
+    is_check_point = False
+
     # 遍历每一页PDF页面
     for page_num, page in enumerate(doc):
 
@@ -153,10 +156,27 @@ def get_table_cells_color():
                 # if cell == '入户门' and len(cells) == 1 and page_num != 0:
                 # 使用 search_for() 方法查找包含"入户门"文本的单元格位置信息，并取第一个结果。
                 cell_position = page.search_for(cell)
-                # print('得到单元格的位置信息：', cell_position)
                 if cell_position:
+                    # print('得到单元格的位置信息：', cell_position)
                     cell_position = cell_position[0]
                 else:
+
+                    cell_images_list = page.get_images(cell_position)
+                    for image_index, cell_images in enumerate(cell_images_list):
+                        xref = cell_images[0]
+                        pix = fitz.Pixmap(doc, xref)
+                        if pix.w >= 1500 and pix.h >= 1100:
+                            image_dir = "cell_images"
+                            if not os.path.exists(image_dir):
+                                os.makedirs(image_dir)
+                            image_path = os.path.join(
+                                image_dir, f"{page_num + 1}_{cell}_{image_index + 1}_{dt}.png"
+                            )
+                            pix.save(image_path)
+                        pix = None
+
+                    # fitz.Pixmap(cell_images[0]).save(file_name)
+                    print('找到图片信息：', cell_images_list)
                     continue
                 # 将找到的单元格位置信息转换为 fitz.Rect 对象，以便后续获取该单元格的颜色信息。
                 rect = fitz.Rect(cell_position.x0, cell_position.y0, cell_position.x1, cell_position.y1)
@@ -166,9 +186,24 @@ def get_table_cells_color():
                 # 对图片进行处理，获取图片信息
                 cell_image_info = get_image_info(cell, pixmap)
 
+                # 根据RGB颜色值判断是否为目标像素RGB值
                 if cell_image_info and cell_image_info[0]['RGB_Color'] == (255, 199, 0):
-                    print('cell_image_info:', cell_image_info)
+                    # print('cell_image_info:', cell_image_info)
+                    # 给检查定位点赋值为True
+                    is_check_point = True
+                    # 保存目标像素RGB值为图片
                     pixmap.save(file_name)
+
+                # 如果RGB颜色值不为目标像素RGB值
+                elif cell_image_info[0]['RGB_Color'] != (255, 199, 0) and not is_check_point:
+                    cell_text = page.get_text(cell)
+                    print('cell_text:', cell_text)
+
+                    # # 判断单元格中是图片还是文字
+                    # if cell_text["blocks"] and cell_text["blocks"][0]["type"] == 1:
+                    #     print("这是一个图片单元格")
+                    # else:
+                    #     print("这是一个文本单元格")
 
                 # 将图片信息加入到列表中
                 color_info_list.append({'page_num': page_num,
