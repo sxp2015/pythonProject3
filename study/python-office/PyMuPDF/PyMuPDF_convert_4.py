@@ -169,17 +169,34 @@ def get_table_cells_color():
                 # 如果单元格中包含1,且只有一个单元格，并且不是第一页
                 # if cell == '入户门' and len(cells) == 1 and page_num != 0:
                 # 使用 search_for() 方法查找包含"入户门"文本的单元格位置信息，并取第一个结果。
-
+                # 查找矩形位置列表
                 cell_position_list = page.search_for(cell)
 
+                # print('cell_position_list:', cell_position_list)
+                check_part_name = ''
+
+                # 如果矩形位置有值
                 if cell_position_list:
                     # print('得到单元格的位置信息（返回是列表）：', cell_position)
                     # print(f'单元格的文字：{cell},行索引号{i}')
+                    # 把矩形位置信息取第一个值，也就是矩形的位置坐标赋值给一个变量
                     cell_position = cell_position_list[0]
                     # print('cell_position:', cell_position)
-
-                    # print('cell_position:', cell_position)
-                else:
+                    # 用矩形对象Rect实例化一个矩形位置实例
+                    rect = fitz.Rect(cell_position)
+                    # 用get_textbox()方法获取矩形中的文本(也就是单元格内的文本)
+                    words1 = page.get_textbox(rect)
+                    # 获取一页PDF整个页面的文本内容
+                    words2 = page.get_textbox(cell_position_list)
+                    print('words1:', words1)
+                    # print('words2:', words2)
+                    if str(words1).strip() == check_part_name:
+                        print('找到切割点')
+                    # print('words:', words)
+                    # for word in words:
+                    #     print('word', word[3], end=" ")  # 打印文本
+                    # # print('cell_position:', cell_position)
+                else: # 这里可以考虑要不要加，判断是否为第一页，第一页的情况
 
                     cell_images_list = page.get_images(cell_position_list)
 
@@ -190,7 +207,7 @@ def get_table_cells_color():
                             image_path = os.path.join(
                                 image_dir, f"page{page_num + 1}_{cell}_{image_index + 1}_{dt}.png"
                             )
-                            pix.save(image_path)
+                            # pix.save(image_path)
                         pix = None
 
                     continue
@@ -213,14 +230,12 @@ def get_table_cells_color():
                     cell_data_list.append({'check_part': check_part_name})
                     # print(f'部位名称:{rows[i]}')
                     # 保存目标像素RGB值为图片
-                    pixmap.save(file_name)
+                    # pixmap.save(file_name)
 
                 # 如果RGB颜色值不为目标像素RGB值
                 elif cell_image_info[0]['RGB_Color'] != (255, 199, 0) and not is_check_point:
                     # cell_text = page.get_text(cell)
                     print('*' * 50)
-
-
 
                 # 将图片信息加入到列表中
                 # color_info_list.append({'page_num': page_num,
