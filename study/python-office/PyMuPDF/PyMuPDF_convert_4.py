@@ -127,13 +127,14 @@ def get_table_cells_color():
     # 定义颜色信息列表
     color_info_list = []
     # 创建图片存放目录
-    if not os.path.exists("pixmap_images"):
-        os.mkdir("pixmap_images")
+    pixmap_images_dir = "pixmap_images"
+    if not os.path.exists(pixmap_images_dir):
+        os.mkdir(pixmap_images_dir)
 
     # 定义符合要求的图片存放目录
-    image_dir = "cell_images"
-    if not os.path.exists(image_dir):
-        os.makedirs(image_dir)
+    cell_image_dir = "cell_images"
+    if not os.path.exists(cell_image_dir):
+        os.makedirs(cell_image_dir)
 
     # 定义目标像素RGB值
     target_rgb = (255, 199, 0)
@@ -164,39 +165,26 @@ def get_table_cells_color():
             # 遍历每一行的每一个单元格
             for j, cell in enumerate(cells):
                 # 定义文件存储名称
-                file_name = f'pixmap_images\\{page_num + 1}_{cell}_{dt}.png'.replace('/', '_').replace('、', '_') \
+                pixmap_file_name = f'page-{page_num + 1}_{cell}_{dt}.png'.replace('/', '_').replace('、', '_') \
                     .replace(' ', '_').replace('。', '_').replace('，', '_').replace('；', '_').replace(':', '_')
+
+                cell_file_name = f'page-{page_num + 1}_{cell}_{dt}.png'.replace('/', '_').replace('、', '_') \
+                    .replace(' ', '_').replace('。', '_').replace('，', '_').replace('；', '_').replace(':', '_')
+
                 # 如果单元格中包含1,且只有一个单元格，并且不是第一页
                 # if cell == '入户门' and len(cells) == 1 and page_num != 0:
                 # 使用 search_for() 方法查找包含"入户门"文本的单元格位置信息，并取第一个结果。
-                # 查找矩形位置列表
+
                 cell_position_list = page.search_for(cell)
 
-                # print('cell_position_list:', cell_position_list)
-                check_part_name = ''
-
-                # 如果矩形位置有值
                 if cell_position_list:
                     # print('得到单元格的位置信息（返回是列表）：', cell_position)
                     # print(f'单元格的文字：{cell},行索引号{i}')
-                    # 把矩形位置信息取第一个值，也就是矩形的位置坐标赋值给一个变量
                     cell_position = cell_position_list[0]
                     # print('cell_position:', cell_position)
-                    # 用矩形对象Rect实例化一个矩形位置实例
-                    rect = fitz.Rect(cell_position)
-                    # 用get_textbox()方法获取矩形中的文本(也就是单元格内的文本)
-                    words1 = page.get_textbox(rect)
-                    # 获取一页PDF整个页面的文本内容
-                    words2 = page.get_textbox(cell_position_list)
-                    print('words1:', words1)
-                    # print('words2:', words2)
-                    if str(words1).strip() == check_part_name:
-                        print('找到切割点')
-                    # print('words:', words)
-                    # for word in words:
-                    #     print('word', word[3], end=" ")  # 打印文本
-                    # # print('cell_position:', cell_position)
-                else: # 这里可以考虑要不要加，判断是否为第一页，第一页的情况
+
+                    # print('cell_position:', cell_position)
+                else:
 
                     cell_images_list = page.get_images(cell_position_list)
 
@@ -204,10 +192,8 @@ def get_table_cells_color():
                         xref = cell_images[0]
                         pix = fitz.Pixmap(doc, xref)
                         if pix.w >= 1500 and pix.h >= 1100:
-                            image_path = os.path.join(
-                                image_dir, f"page{page_num + 1}_{cell}_{image_index + 1}_{dt}.png"
-                            )
-                            # pix.save(image_path)
+                            image_path = os.path.join(cell_image_dir, cell_file_name)
+                            pix.save(image_path)
                         pix = None
 
                     continue
@@ -229,8 +215,10 @@ def get_table_cells_color():
                     # 把检查的部位添加到单元格数据列表
                     cell_data_list.append({'check_part': check_part_name})
                     # print(f'部位名称:{rows[i]}')
+                    # 定义图片保存路径
+                    pixmap_image_path = os.path.join(pixmap_images_dir, pixmap_file_name)
                     # 保存目标像素RGB值为图片
-                    # pixmap.save(file_name)
+                    pixmap.save(pixmap_image_path)
 
                 # 如果RGB颜色值不为目标像素RGB值
                 elif cell_image_info[0]['RGB_Color'] != (255, 199, 0) and not is_check_point:
