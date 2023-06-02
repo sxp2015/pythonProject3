@@ -123,7 +123,8 @@ def get_table_cells_color():
     # 打开PDF文档
     doc = fitz.open(pdf_file_path)
     # 获取文档总页数
-    page_count = doc.page_count
+    total_pages = doc.page_count
+
     # 定义颜色信息列表
     color_info_list = []
     # 创建图片存放目录
@@ -145,97 +146,157 @@ def get_table_cells_color():
     # 定义列表变量用于存储单元格提取后整合的数据
     cell_data_list = []
 
+    # 定义循环文档的起始页和结束页
+    start_page = 1
+
+    # 定义循环文档的结束页
+    end_page = total_pages
+
+    # 定义检查部位
+    check_part_name = None
+
+    # 定义文字描述列表
+    cell_text_list = []
+
+    # 将 start_page 和 end_page 按需进行处理
+    if start_page is None:
+        start_page = 0
+    elif start_page >= total_pages:
+        raise ValueError("起始页码超出文档总页数！")
+    else:
+        start_page -= 1
+
+    if end_page is None:
+        end_page = total_pages
+    elif end_page > total_pages:
+        raise ValueError("终止页码超出文档总页数！")
+    else:
+        end_page -= 1
+
     # 遍历每一页PDF页面
-    for page_num, page in enumerate(doc):
+    for page_num, page in enumerate(doc, start=start_page):
 
         # 获取所有页面的文本内容
         rows = page.get_text().split("\n")
 
+        # 获取文档中所有的图片列表
+        doc_images_list = page.get_images()
+        # print('cell_images_list:', doc_images_list)
+
         # 遍历每一行
         for i, row in enumerate(rows):
 
+            # print('row',row)
+
+            # 获取每行的长度
             # 获取每行的所有单元格
             cells = row.strip().split("\t")
 
+            # 提取房号的值
             if '房\u3000\u3000号' in cells:
                 house_number = rows[i + 1]
                 cell_data_list.append({'house_number': house_number})
-                print(f'房号：{house_number}')
+                # print(f'房号：{house_number}')
 
             # 遍历每一行的每一个单元格
             for j, cell in enumerate(cells):
-                # 定义文件存储名称
+                # 定义符合条件的图片文件存储名称
                 pixmap_file_name = f'page-{page_num + 1}_{cell}_{dt}.png'.replace('/', '_').replace('、', '_') \
                     .replace(' ', '_').replace('。', '_').replace('，', '_').replace('；', '_').replace(':', '_')
 
-                cell_file_name = f'page-{page_num + 1}_{cell}_{dt}.png'.replace('/', '_').replace('、', '_') \
-                    .replace(' ', '_').replace('。', '_').replace('，', '_').replace('；', '_').replace(':', '_')
-
-                # 如果单元格中包含1,且只有一个单元格，并且不是第一页
-                # if cell == '入户门' and len(cells) == 1 and page_num != 0:
-                # 使用 search_for() 方法查找包含"入户门"文本的单元格位置信息，并取第一个结果。
-
+                # 查找每个单元格的位置信息
                 cell_position_list = page.search_for(cell)
 
+                # 如果单元格有值说明单元格是文本
                 if cell_position_list:
-                    # print('得到单元格的位置信息（返回是列表）：', cell_position)
-                    # print(f'单元格的文字：{cell},行索引号{i}')
-                    cell_position = cell_position_list[0]
-                    # print('cell_position:', cell_position)
+                    # print(f'单元格内容：{cell},行索引号{i}，列索引号{j}')
 
-                    # print('cell_position:', cell_position)
-                else:
+                    # 遍历单元格位置坐标
+                    for cell_position in cell_position_list:
+                        # 得到坐标的文字
+                        cell_text = page.get_textbox(cell_position)
+                        # 把文字添加到列表
+                        cell_text_list.append(cell_text)
+                        # print('cell_text:', cell_text)
+                        # 输出单元格位置信息
+                        # print('cell_position:', cell_position)
+                        # 将找到的单元格位置信息转换为 fitz.Rect 对象，以便后续获取该单元格的颜色信息。
+                        rect = fitz.Rect(cell_position.x0, cell_position.y0, cell_position.x1, cell_position.y1)
 
-                    cell_images_list = page.get_images(cell_position_list)
+                        # 使用 get_pixmap() 方法获取指定范围内的图像数据，并返回 fitz.Pixmap 对象。
+                        pixmap = page.get_pixmap(matrix=fitz.Identity, colorspace=fitz.csRGB, clip=rect)
 
-                    for image_index, cell_images in enumerate(cell_images_list):
-                        xref = cell_images[0]
-                        pix = fitz.Pixmap(doc, xref)
-                        if pix.w >= 1500 and pix.h >= 1100:
-                            image_path = os.path.join(cell_image_dir, cell_file_name)
-                            pix.save(image_path)
-                        pix = None
+                        # 调用获取单元格图片信息的方法，对像素图进行处理，返回图片的RGB值和其他信息
+                        cell_image_info = get_image_info(cell, pixmap)
 
-                    continue
-                # 将找到的单元格位置信息转换为 fitz.Rect 对象，以便后续获取该单元格的颜色信息。
-                rect = fitz.Rect(cell_position.x0, cell_position.y0, cell_position.x1, cell_position.y1)
-                # 使用 get_pixmap() 方法获取指定范围内的图像数据，并返回 fitz.Pixmap 对象。
-                pixmap = page.get_pixmap(matrix=fitz.Identity, colorspace=fitz.csRGB, clip=rect)
+                        # 根据RGB颜色值判断是否为目标像素RGB值
+                        if cell_image_info and cell_image_info[0]['RGB_Color'] == target_rgb:
+                            # print('cell_image_info:', cell_image_info)
+                            # 给检查定位点赋值为True
+                            is_check_point = True
+                            # 给查检部位赋值
+                            check_part_name = rows[i]
+                            # 把检查的部位添加到单元格数据列表
+                            cell_data_list.append({'check_part': check_part_name, 'cell_text_list': cell_text_list})
+                            # print(f'部位名称:{rows[i]}')
+                            # 定义图片保存路径
+                            pixmap_image_path = os.path.join(pixmap_images_dir, pixmap_file_name)
+                            # 保存目标像素RGB值为图片
+                            # pixmap.save(pixmap_image_path)
 
-                # 对图片进行处理，获取图片信息
-                cell_image_info = get_image_info(cell, pixmap)
-
-                # 根据RGB颜色值判断是否为目标像素RGB值
-                if cell_image_info and cell_image_info[0]['RGB_Color'] == (255, 199, 0):
-                    # print('cell_image_info:', cell_image_info)
-                    # 给检查定位点赋值为True
-                    is_check_point = True
-                    # 给查检部位赋值
-                    check_part_name = rows[i]
-                    # 把检查的部位添加到单元格数据列表
-                    cell_data_list.append({'check_part': check_part_name})
-                    # print(f'部位名称:{rows[i]}')
-                    # 定义图片保存路径
-                    pixmap_image_path = os.path.join(pixmap_images_dir, pixmap_file_name)
-                    # 保存目标像素RGB值为图片
-                    pixmap.save(pixmap_image_path)
-
-                # 如果RGB颜色值不为目标像素RGB值
-                elif cell_image_info[0]['RGB_Color'] != (255, 199, 0) and not is_check_point:
-                    # cell_text = page.get_text(cell)
-                    print('*' * 50)
-
-                # 将图片信息加入到列表中
-                # color_info_list.append({'page_num': page_num,
-                #                         'cell_position': cell_position,
-                #                         'cell_image_info': cell_image_info,
-                #                         'pixmap_width': pixmap.width,
-                #                         'pixmap_height': pixmap.height})
+                        # 如果RGB颜色值不为目标像素RGB值
+                        # elif cell_image_info and cell_image_info[0]['RGB_Color'] != target_rgb and not is_check_point:
+                        #
+                        #     # cell_text = page.get_text(cell)
+                        #     print('*' * 50)
 
             # print(f'在第{page_num + 1}页,第{i + 1}行 存在满足条件的单元格,总共有:{condition_one}个单元格')
 
+        # 遍历图片列表
+        for image_index, cell_images in enumerate(doc_images_list):
+
+            if is_check_point:
+                # 将当前页作页文档循环的开始页
+                start_page = page_num
+
+                # 定义检查部位的存储名称
+                cell_file_name = f'page-{page_num + 1}-image-{image_index + 1}-{check_part_name}-{dt}.png'.replace('/',
+                                                                                                                   '_').replace(
+                    '、', '_') \
+                    .replace(' ', '_').replace('。', '_').replace('，', '_').replace('；', '_').replace(':', '_')
+
+                for cell_word_index, cell_word in enumerate(cell_text_list):
+                    # print(f'单元格内容:{cell_word},索引:{cell_word_index}')
+
+                    # 一个图片对象中获取了图片在文档中的位置信息，即 xref。
+                    xref = cell_images[0]
+
+                    # 从指定的 PDF 文档中获取一个图片对象的像素图。 doc: 文档对象 ，xref:图片在文档中的位置信息/编号
+                    pix = fitz.Pixmap(doc, xref)
+
+                    # 如果图片符合条件并且是检查部位有值
+                    if pix.w >= 1500 and pix.h >= 1100 and check_part_name and page_num > 1:
+                        print(f'当前文字：{cell_text_list[cell_word_index]}')
+
+                        # 定义图片的保存名称
+                        image_path = os.path.join(cell_image_dir, cell_file_name)
+                        # 保存符合条件的图片
+                        # pix.save(image_path)
+                    pix = None
+                    # 跳出当前循环，继续下一轮循环
+                    continue
+
+        # 检查是否为分隔点，如果是分隔点，更新start_page和is_check_point
+        if is_check_point and page_num == end_page - 1:
+            start_page = end_page
+            is_check_point = False
+        elif is_check_point and page_num < end_page - 1:
+            continue
+        else:
+            start_page = page_num + 1
+
     # 返回整合后的数据
-    return [color_info_list, cell_data_list]
+    return cell_data_list
 
 
 if __name__ == "__main__":
