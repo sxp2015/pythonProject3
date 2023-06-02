@@ -132,6 +132,11 @@ def get_table_cells_color():
     if not os.path.exists(pixmap_images_dir):
         os.mkdir(pixmap_images_dir)
 
+    # 创建文本存放目录
+    pixmap_text_dir = "text_images"
+    if not os.path.exists(pixmap_text_dir):
+        os.mkdir(pixmap_text_dir)
+
     # 定义符合要求的图片存放目录
     cell_image_dir = "cell_images"
     if not os.path.exists(cell_image_dir):
@@ -157,6 +162,8 @@ def get_table_cells_color():
 
     # 定义文字描述列表
     cell_text_list = []
+
+    # 定义要提取文字的矩形坐标
 
     # 将 start_page 和 end_page 按需进行处理
     if start_page is None:
@@ -186,9 +193,6 @@ def get_table_cells_color():
         # 遍历每一行
         for i, row in enumerate(rows):
 
-            # print('row',row)
-
-            # 获取每行的长度
             # 获取每行的所有单元格
             cells = row.strip().split("\t")
 
@@ -212,19 +216,30 @@ def get_table_cells_color():
                     # print(f'单元格内容：{cell},行索引号{i}，列索引号{j}')
 
                     # 遍历单元格位置坐标
-                    for cell_position in cell_position_list:
+                    for cell_index, cell_position in enumerate(cell_position_list):
+
                         # 得到坐标的文字
                         cell_text = page.get_textbox(cell_position)
                         # 把文字添加到列表
                         cell_text_list.append(cell_text)
-                        # print('cell_text:', cell_text)
-                        # 输出单元格位置信息
-                        # print('cell_position:', cell_position)
                         # 将找到的单元格位置信息转换为 fitz.Rect 对象，以便后续获取该单元格的颜色信息。
-                        rect = fitz.Rect(cell_position.x0, cell_position.y0, cell_position.x1, cell_position.y1)
+                        cell_rect = fitz.Rect(cell_position.x0, cell_position.y0, cell_position.x1, cell_position.y1)
+                        # print('cell_rect:', cell_rect)
+                        # 计算单元格边框宽度和高度
+                        cell_width = cell_rect.width
+                        cell_height = cell_rect.height
+
+                        # 加上矩形的尺寸判断条件
+                        print('文字:', cell_text, '矩形宽度:', cell_rect.width,
+                              '矩形宽度:', cell_rect.height, '坐标:', cell_position)
 
                         # 使用 get_pixmap() 方法获取指定范围内的图像数据，并返回 fitz.Pixmap 对象。
-                        pixmap = page.get_pixmap(matrix=fitz.Identity, colorspace=fitz.csRGB, clip=rect)
+                        pixmap = page.get_pixmap(matrix=fitz.Identity, colorspace=fitz.csRGB, clip=cell_rect)
+
+                        # 定义文本转图片的保存路径
+                        pixmap_text_path = os.path.join(pixmap_text_dir, pixmap_file_name)
+                        # 保存目标像素RGB值为图片
+                        pixmap.save(pixmap_text_path)
 
                         # 调用获取单元格图片信息的方法，对像素图进行处理，返回图片的RGB值和其他信息
                         cell_image_info = get_image_info(cell, pixmap)
@@ -239,6 +254,7 @@ def get_table_cells_color():
                             # 把检查的部位添加到单元格数据列表
                             cell_data_list.append({'check_part': check_part_name, 'cell_text_list': cell_text_list})
                             # print(f'部位名称:{rows[i]}')
+                            # print(f'部位名称:{cells[j]}')
                             # 定义图片保存路径
                             pixmap_image_path = os.path.join(pixmap_images_dir, pixmap_file_name)
                             # 保存目标像素RGB值为图片
@@ -250,7 +266,7 @@ def get_table_cells_color():
                         #     # cell_text = page.get_text(cell)
                         #     print('*' * 50)
 
-            # print(f'在第{page_num + 1}页,第{i + 1}行 存在满足条件的单元格,总共有:{condition_one}个单元格')
+                # 如果有单元格并且矩形尺寸符合要求
 
         # 遍历图片列表
         for image_index, cell_images in enumerate(doc_images_list):
@@ -260,31 +276,25 @@ def get_table_cells_color():
                 start_page = page_num
 
                 # 定义检查部位的存储名称
-                cell_file_name = f'page-{page_num + 1}-image-{image_index + 1}-{check_part_name}-{dt}.png'.replace('/',
-                                                                                                                   '_').replace(
-                    '、', '_') \
-                    .replace(' ', '_').replace('。', '_').replace('，', '_').replace('；', '_').replace(':', '_')
+                cell_file_name = f'page-{page_num + 1}-image-{image_index + 1}-{check_part_name}-' \
+                                 f'{dt}.png'.replace('/', '_').replace('、', '_').replace(' ', '_') \
+                    .replace('。', '_').replace('，', '_').replace('；', '_').replace(':', '_')
 
-                for cell_word_index, cell_word in enumerate(cell_text_list):
-                    # print(f'单元格内容:{cell_word},索引:{cell_word_index}')
+                # 一个图片对象中获取了图片在文档中的位置信息，即 xref。
+                xref = cell_images[0]
 
-                    # 一个图片对象中获取了图片在文档中的位置信息，即 xref。
-                    xref = cell_images[0]
+                # 从指定的 PDF 文档中获取一个图片对象的像素图。 doc: 文档对象 ，xref:图片在文档中的位置信息/编号
+                pix = fitz.Pixmap(doc, xref)
 
-                    # 从指定的 PDF 文档中获取一个图片对象的像素图。 doc: 文档对象 ，xref:图片在文档中的位置信息/编号
-                    pix = fitz.Pixmap(doc, xref)
-
-                    # 如果图片符合条件并且是检查部位有值
-                    if pix.w >= 1500 and pix.h >= 1100 and check_part_name and page_num > 1:
-                        print(f'当前文字：{cell_text_list[cell_word_index]}')
-
-                        # 定义图片的保存名称
-                        image_path = os.path.join(cell_image_dir, cell_file_name)
-                        # 保存符合条件的图片
-                        # pix.save(image_path)
-                    pix = None
-                    # 跳出当前循环，继续下一轮循环
-                    continue
+                # 如果图片符合条件并且是检查部位有值
+                if pix.w >= 1500 and pix.h >= 1100 and check_part_name and page_num > 1:
+                    # 定义图片的保存名称
+                    image_path = os.path.join(cell_image_dir, cell_file_name)
+                    # 保存符合条件的图片
+                    # pix.save(image_path)
+                pix = None
+                # 跳出当前循环，继续下一轮循环
+                continue
 
         # 检查是否为分隔点，如果是分隔点，更新start_page和is_check_point
         if is_check_point and page_num == end_page - 1:
