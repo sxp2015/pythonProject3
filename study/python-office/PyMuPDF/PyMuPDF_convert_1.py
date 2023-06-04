@@ -1,7 +1,7 @@
 #!/usr/bin/python3
-# coding:utf-8            
+# coding:utf-8
 #
-# Copyright (C) 2023 - 2023 Sunny， Inc. All Rights Reserved 
+# Copyright (C) 2023 - 2023 Sunny， Inc. All Rights Reserved
 #
 # @Time    : 2023-05-26 21:12
 # @Author  : Code_By_Sunny_Sun
@@ -10,8 +10,14 @@
 # @IDE     : PyCharm
 # 导入必要的库
 import os  # 处理文件和目录路径相关的功能
+import re
+import struct
+from collections import Counter
+
 import fitz  # 操作 PDF 文件的库 PyMuPDF
 import io  # 读取二进制数据的库
+
+import numpy as np
 from PIL import Image  # 处理图片的库
 import tabula  # 读取表格数据的库
 import pandas as pd  # 处理表格数据的库
@@ -22,162 +28,281 @@ from openpyxl import Workbook
 pdf_file_path = os.path.join('pdf_files/查验报告.pdf')
 doc = fitz.open(pdf_file_path)
 
+# 获取当前时间并格式化，用于保存图片命名
+dt = datetime.now().strftime("%Y%m%d-%H%M%S%f")
 
-# 提取表格单元格中信息的方法
-def extract_table_cells(page):
-    # 调用 get_text("table") 方法获取表格数据
-    table_data = page.get_text("table")
 
-    # 如果表格数据为空，则返回空列表
-    if not table_data:
-        return []
+# 获取像素图出现次数最多的颜色
+def get_most_common_color(pixmap):
+    # 定义列表用于整合颜色数据
+    most_color_list = []
 
-    # 将表格数据按行分割
-    rows = table_data.split("\n")
-    # 用于存储单元格数据和位置信息的列表
-    table_cells = []
+    # 提取像素图的宽和高
+    width, height = pixmap.width, pixmap.height
 
-    # 遍历表格数据的每一行
-    for i, row in enumerate(rows):
-        # 将每一行按制表符（\t）分割成各个单元格
-        cells = row.strip().split("\t")
+    # 遍历宽和高，获得每个像素点的RGB值
+    for y in range(height):
+        for x in range(width):
+            r, g, b = pixmap.pixel(x, y)
+            # print(f"Pixel ({x}, {y}): R={r}, G={g}, B={b}")
 
-        # 如果该行不为空，则遍历该行中的所有单元格
-        if cells:
-            # 获取第一行的每个单元格
+    # 将 pixmap 转换为 Numpy 数组
+    arr = np.frombuffer(pixmap.samples, dtype=np.uint8).reshape((pixmap.height, pixmap.width, pixmap.n))
+
+    # 获取颜色出现次数
+    color_counts = Counter(map(tuple, arr.reshape(-1, arr.shape[-1])))
+
+    # 选取出现次数最多的颜色
+    most_common_color = color_counts.most_common(1)[0][0]
+
+    # print( f"Most common color-占比最大的颜色RGB值: " f"R={most_common_color[0]}, G={most_common_color[1]},
+    # B={most_common_color[2]},出现次数：{max(color_counts.values())}")
+
+    most_color_list.append(
+        {'RGB_Color': (most_common_color[0], most_common_color[1], most_common_color[2]),
+         'count': max(color_counts.values())})
+
+    return most_color_list
+
+
+# 获取图像详细信息,得到出现最多的颜色的RGB值,并保存为图片
+def get_image_info(cell, pixmap):
+    # 像素图的色彩空间
+    color_space = pixmap.colorspace
+    # 确定使用的颜色
+    color_count = pixmap.color_count()
+    # 确定最常用颜色的份额占比
+    top_colors = pixmap.color_topusage()
+    # 调用方法获取出现最多的颜色
+    most_color_list = get_most_common_color(pixmap)
+    # print('most_color_list:', most_color_list)
+
+    # most_color_count = most_color_list[0]['count']
+    # 出现最多的次数
+    # most_color_value = max(most_color_count.values())
+    # 定义出现最多的颜色
+
+    # for color in most_color_count:
+    #     most_color = most_color_count[color]
+    #     if max(most_color_count.values()) == most_color:
+    #         most_rgb_colors.append(color)
+    #         print(f"颜色：{color},出现次数：{most_color}次")
+
+    # print('most_rgb_color:', most_rgb_color)
+    # 获取像素图的RGB值，返回是一个 bytes 对象
+    # color_rgb = pixmap.samples
+    # print('color_space-色彩空间:', color_space)
+    # print('color_space-色彩空间:', color_space)
+    # print('most_color-最多的颜色:', most_color[0])
+    # print('top_colors-占比是:', round(top_colors[0] * 100, 2), '%')
+    # print('color_rgb:', color_rgb)
+    # print('=' * 30)
+    # 保存像素图为图片
+
+    if isinstance(color_space, type(fitz.csRGB)):
+        min_val = 0
+        max_val = 255
+    elif color_space == "DeviceGray":
+        min_val = max_val = pixmap.n - 1
+    else:
+        raise ValueError(f"Unexpected color space: {color_space}")
+    # print(f"颜色空间：{color_space}, 范围值：{min_val}～{max_val}")
+
+    # 获取图片中的像素点数
+    n_pixels = pixmap.width * pixmap.height
+    # 颜色图片中的列表
+    colors = [pixmap.pixel(x, y) for x in range(pixmap.width) for y in range(pixmap.height)]
+    # print(f"像素点数量：{n_pixels}")
+    # print(f"颜色列表：{colors}")
+
+    return most_color_list
+
+
+# 获取PDF中所有页面的图片数量
+def get_table_cells_color():
+    # 打开PDF文档
+    doc = fitz.open(pdf_file_path)
+    # 获取文档总页数
+    total_pages = doc.page_count
+
+    # 定义颜色信息列表
+    color_info_list = []
+
+    # 创建图片存放目录
+    pixmap_images_dir = "pixmap_images"
+    if not os.path.exists(pixmap_images_dir):
+        os.mkdir(pixmap_images_dir)
+
+    # 创建文本存放目录
+    pixmap_text_dir = "text_images"
+    if not os.path.exists(pixmap_text_dir):
+        os.mkdir(pixmap_text_dir)
+
+    # 定义符合要求的图片存放目录
+    cell_image_dir = "cell_images"
+    if not os.path.exists(cell_image_dir):
+        os.makedirs(cell_image_dir)
+
+    # 定义目标像素RGB值
+    target_rgb = (255, 199, 0)
+
+    # 定义列表变量用于存储单元格提取后整合的数据
+    cell_data_list = []
+
+    # 定义循环文档的起始页和结束页
+    start_page = 1
+
+    # 定义循环文档的结束页
+    end_page = total_pages
+
+    # 定义检查部位
+    check_part_name = None
+
+    # 定义文字描述列表
+    cell_text_list = []
+
+    # 定义要提取文字的矩形坐标
+
+    # 将 start_page 和 end_page 按需进行处理
+    if start_page is None:
+        start_page = 0
+    elif start_page >= total_pages:
+        raise ValueError("起始页码超出文档总页数！")
+    else:
+        start_page -= 1
+
+    if end_page is None:
+        end_page = total_pages
+    elif end_page > total_pages:
+        raise ValueError("终止页码超出文档总页数！")
+    else:
+        end_page -= 1
+
+    start_index = None
+    # 遍历每一页PDF页面
+    for page_num, page in enumerate(doc, start=start_page):
+
+        # 获取所有页面的文本内容
+        rows = page.get_text().split("\n")
+
+        # print('cell_images_list:', doc_images_list)
+        # print('【rows:】', rows)
+
+        # 遍历每一页的文本列表
+        for i, row in enumerate(rows):
+
+            # 获取每行的所有单元格
+            cells = row.strip().split("\t")
+            # 输出测试
+            # print('rows:', rows[i], 'index:', i)
+
+            # print('【cells:】', cells)
+            # 如果是检查部位的单元格位置
+
+            # 遍历每一行的每一个单元格
             for j, cell in enumerate(cells):
-                # 使用 search_for 方法查找 PDF 中的单元格
-                text_result = page.search_for(cell)
 
-                print('text_result=============', text_result)
-                image_result = page.get_images(cell)
+                # 定义符合条件的图片文件存储名称
+                pixmap_file_name = f'page-{page_num + 1}_{rows[i]}_{cells[j]}_{dt}.png'.replace('/', '_').replace('、',
+                                                                                                                  '_') \
+                    .replace(' ', '_').replace('。', '_').replace('，', '_').replace('；', '_').replace(':', '_')
 
-                # 如果单元格有文本的处理
-                if text_result:
-                    print(f'第{page.number + 1}页第{i + 1}行第{j + 1}列的单元格文本内容是：{cell}')
-                    table_cell = {"value": cell, "page_num": page.number + 1, "row": i + 1, "column": j + 1}
-                    table_cells.append(table_cell)
+                # 查找每个单元格的位置信息
+                cell_position_list = page.search_for(cell)
+                # print('cell_position_list:', cell_position_list)
 
-                    table_cells.append({
-                        "value": cell,
-                        "page_num": page.number + 1,
-                    })
+                # 如果单元格有值说明单元格是文本
+                if cell_position_list:
+                    # print(f'单元格内容：{cell},行索引号{i}，列索引号{j}')
 
-                # 如果单元格有图片的处理
-                if image_result:
-                    # print(f'从第{j + 1}页中获取到的单元格的图片内容是： {image_result}')
-                    for l, img in enumerate(image_result):
-                        # 将对象转换为 Rect 类型，并获取其位置信息
-                        # search_for 方法返回的结果是一个列表，其中每个元素都是一个包含四个元素的元组，
-                        # 分别表示匹配项的左、上、右、下四个角的坐标。这四个坐标可以用来创建一个 fitz.Rect 对象，
-                        # 从而表示该匹配项在 PDF 页面上的位置和大小。因此，代码中的 bbox = fitz.Rect(obj[:4])
-                        # 表示将第一个匹配项的四个坐标传递给 fitz.Rect 构造函数，创建一个 Rect 对象并将其赋值给 bbox 变量。
-                        # 结果就是 bbox 变量包含了这个匹配项在页面上的位置和大小信息，可以用于后续的处理。
-                        bbox = fitz.Rect(img[:4])
-                        # print('bbox', bbox)
-                        # 将单元格的数据和位置信息添加到列表中
-                        table_cells.append({
-                            "value": f"图片{l + 1}-{img}",
-                            "page_num": page.number + 1,
-                            # "left": bbox.x0,
-                            # "top": bbox.y0,
-                            # "right": bbox.x1,
-                            # "bottom": bbox.y1
-                        })
+                    # 遍历单元格位置坐标
+                    for cell_index, cell_position in enumerate(cell_position_list):
+                        # 确定检查部位在页面的位置
+                        # 将找到的单元格位置信息转换为 fitz.Rect 对象，以便后续获取该单元格的颜色信息。
+                        cell_rect = fitz.Rect(cell_position.x0, cell_position.y0, cell_position.x1, cell_position.y1)
+                        # print('cell_rect:', cell_rect)
 
-                print(f'索引:{j}，单元格的值:{cell}')
+                        # 加上矩形的尺寸判断条件
+                        # print('文字:', cell_text, '矩形宽度:', cell_rect.width,
+                        #      '矩形宽度:', cell_rect.height, '坐标:', cell_position)
 
-        return table_cells
+                        # 使用 get_pixmap() 方法获取指定范围内的图像数据，并返回 fitz.Pixmap 对象。
+                        # 得到像素图对象
+                        pixmap = page.get_pixmap(matrix=fitz.Identity, colorspace=fitz.csRGB, clip=cell_rect)
 
-    # 遍历表格数据的每一列
+                        # 调用获取单元格图片信息的方法，对像素图进行处理，返回图片的RGB值和其他信息
+                        cell_image_info = get_image_info(cell, pixmap)
 
+                        # 根据RGB颜色值判断是否为目标像素RGB值
+                        if cell_image_info and cell_image_info[0]['RGB_Color'] == target_rgb:
+                            # print('cell_image_info:', cell_image_info)
+                            # 给查检部位赋值
+                            check_part_name = rows[i]
 
-# 保存PDF中的每页所有图片
+                            print('page_rgb_in_rows:', i + 1, 'page_num:', page_num + 1, 'check_part_name',
+                                  check_part_name)
 
-def save_images_in_pdf(pdf_path):
-    # 创建保存图片的文件夹
-    if not os.path.exists("pdf_image"):
-        os.mkdir("pdf_image")
-    doc = fitz.open(pdf_path)
+                            # 得到当前的索引下标
+                            # cell_index = cell_position_list[cell_index]
 
-    # 遍历PDF文档每一页
-    for page_num, page in enumerate(doc):
+                            # print('cell_index:', cell_index)
 
-        # 保存图片列表
-        image_list = page.get_images()
-        if image_list:
-            print(f"Page {page_num + 1} contains {len(image_list)} image(s):")
-            for image_index, image in enumerate(image_list):
-                xref = image[0]
-                pix = fitz.Pixmap(doc, xref)
-                if pix.w >= 1500 and pix.h >= 1100:
-                    image_dir = "pdf_image"
-                    if not os.path.exists(image_dir):
-                        os.makedirs(image_dir)
-                    image_path = os.path.join(
-                        image_dir, f"查验报告_page{page_num + 1}_image{image_index + 1}.png"
-                    )
-                    # pix.save(image_path)
-                    print(f"\t{image_path}")
-                pix = None
-        else:
-            print(f"Page {page_num + 1} does not contain any images.")
+                            # print('rows[i]:', i, 'cells[j]:', j)
 
-    doc.close()
+                            # 把检查的部位添加到单元格数据列表
+                            # cell_data_list.append(
+                            #     {'check_part': check_part_name, 'cell_text_list': cell_text_list})
+                            # print(f'部位名称:{rows[i]}')
+                            # print(f'部位名称:{cells[j]}')
+                            # 定义图片保存路径
+                            pixmap_image_path = os.path.join(pixmap_images_dir, pixmap_file_name)
+                            # 保存目标像素RGB值为图片
+                            # pixmap.save(pixmap_image_path)
 
+                        # 定义文本转图片的保存路径
+                        pixmap_text_path = os.path.join(pixmap_text_dir, pixmap_file_name)
+                        # 保存检查部位的像素RGB值为图片
+                        pixmap.save(pixmap_text_path)
+                        print('pixmap_text_path:', pixmap_text_path)
 
-# 创建保存数据到Excel的方法
-def create_extract_excel():
-    # 创建工作簿
-    wb = Workbook()
+                        # 如果是检查部位点并且有值
+                        if check_part_name:
 
-    # 获取当前时间并格式化
-    dt = datetime.now().strftime("%Y%m%d_%H%M%S")
+                            # 得到坐标的文字列表
+                            cell_text = page.get_textbox(rows[i + 1])
+                            print('cell_text[rows[i+1]]:', cell_text)
+                            # 得到坐标的图片列表
+                            cell_image_list = page.get_images(cell_position)
 
-    # 确定文件夹路径和文件名
-    folder_path = "./generated_excel"
-    filename = f"{folder_path}/extract_excel_{dt}.xlsx"
+                            # 遍历图片列表
+                            for image_index, cell_images in enumerate(cell_image_list):
 
-    # 用于存储所有表格单元格数据的列表
-    table_cells_list = []
+                                # 定义检查部位的存储名称
+                                cell_file_name = f'page-{page_num + 1}-{check_part_name}-rows-{rows[i]}-cells-{cells[j]}-' \
+                                                 f'{dt}.png'.replace('/', '_').replace('、', '_').replace(' ', '_') \
+                                    .replace('。', '_').replace('，', '_').replace('；', '_').replace(':', '_')
 
-    # 如果文件夹不存在，则创建
-    if not os.path.exists(folder_path):
-        os.makedirs(folder_path)
+                                # 一个图片对象中获取了图片在文档中的位置信息，即 xref。
+                                xref = cell_images[0]
 
-    # 获取默认的第一个工作表对象
-    ws = wb.active
+                                # 从指定的 PDF 文档中获取一个图片对象的像素图。 doc: 文档对象 ，xref:图片在文档中的位置信息/编号
+                                pix = fitz.Pixmap(doc, xref)
 
-    # 写入表头数据
-    headers = ["序号", "创建日期", "楼栋", "房号", "部位", "检查项", "问题描述", "问题照片", "检查人", "责任单位", "工种", "工单状态", "销项照片", "最后修改人",
-               "最后修改时间", "备注"]
+                                # 如果图片符合条件并且是检查部位有值
+                                if pix.w >= 1500 and pix.h >= 1100:
+                                    # 定义图片的保存名称
+                                    image_path = os.path.join(cell_image_dir, cell_file_name)
+                                    # 保存符合条件的图片
+                                    pix.save(image_path)
+                                    print('image_path:', image_path)
+                                pix = None
 
-    # 遍历PDF文档每一页
-    for page_num, page in enumerate(doc):
+                            print('cell_text:', cell_text)
+                            print('cell_image_list:', cell_image_list)
 
-        # 对当前页执行表格提取
-        table_cells_list = extract_table_cells(page)
-
-        # 如果存在表格，则打印表格数据
-        if table_cells_list:
-            print('table_cells_list', table_cells_list)
-        else:
-            print(f"No table found on page {page.number}.")
-
-    for i, header in enumerate(headers):
-        ws.cell(1, i + 1, header)
-
-    for j, table_cell in enumerate(table_cells_list):
-        ws.cell(2, j + 1, table_cell["value"])
-
-    # 保存工作簿
-    wb.save(filename)
-
-    print(f"成功创建工作簿 {filename}！")
+    # 返回整合后的数据
+    return cell_data_list
 
 
 if __name__ == "__main__":
-    # save_images_in_pdf(pdf_file_path)
-    print('*' * 80)
-    create_extract_excel()
-    # extract_table_images_and_text(pdf_file_path)
+    print('返回结果：', get_table_cells_color())

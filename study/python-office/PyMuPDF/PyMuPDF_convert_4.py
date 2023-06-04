@@ -230,8 +230,8 @@ def get_table_cells_color():
                         cell_height = cell_rect.height
 
                         # 加上矩形的尺寸判断条件
-                        print('文字:', cell_text, '矩形宽度:', cell_rect.width,
-                              '矩形宽度:', cell_rect.height, '坐标:', cell_position)
+                        # print('文字:', cell_text, '矩形宽度:', cell_rect.width,
+                        #      '矩形宽度:', cell_rect.height, '坐标:', cell_position)
 
                         # 使用 get_pixmap() 方法获取指定范围内的图像数据，并返回 fitz.Pixmap 对象。
                         pixmap = page.get_pixmap(matrix=fitz.Identity, colorspace=fitz.csRGB, clip=cell_rect)
@@ -266,7 +266,14 @@ def get_table_cells_color():
                         #     # cell_text = page.get_text(cell)
                         #     print('*' * 50)
 
-                # 如果有单元格并且矩形尺寸符合要求
+                # 如果是一行当中最后一个单元格
+                if cells[j] == len(cells) - 1:
+                    # 定义图片保存路径
+                    pixmap_image_path = os.path.join(pixmap_images_dir, pixmap_file_name)
+                    # 保存目标像素RGB值为图片
+                    # pixmap.save(pixmap_image_path)
+
+                    print(f'是最后一个单元格：{cell},行号,{i},列号,{j}')
 
         # 遍历图片列表
         for image_index, cell_images in enumerate(doc_images_list):
