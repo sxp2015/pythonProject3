@@ -163,6 +163,9 @@ def get_table_cells_color():
     # 定义检查部位列表
     check_part_name_list = []
 
+    # 宽1500，高1100 像素图片列表
+    pix_image_list = []
+
     # 替换的特殊符号列表
     replace_symbol_list = ['/', '、', ' ', '。', '，', '；', ':', '\\', 'u3000', '\t']
 
@@ -199,8 +202,6 @@ def get_table_cells_color():
         # 得到当前页面的所有图片列表
         page_image_list = page.get_images()
 
-        # print('page_image_list:', page_image_list)
-
         # print('cell_images_list:', doc_images_list)
         # print('【rows:】', rows)
 
@@ -209,8 +210,6 @@ def get_table_cells_color():
 
             # 获取每行的所有单元格列表
             cells = row.strip().split("\t")
-
-
 
             # 输出测试
             # print('rows:', rows[i], 'index:', i)
@@ -289,7 +288,7 @@ def get_table_cells_color():
                         # 定义文本转图片的保存路径
                         pixmap_text_path = os.path.join(pixmap_text_dir, pixmap_file_name)
                         # 保存检查部位的像素RGB值为图片
-                        pixmap.save(pixmap_text_path)
+                        # pixmap.save(pixmap_text_path)
                         print('pixmap_text_path:', pixmap_text_path)
 
                         # 如果是检查部位点并且有值
@@ -307,12 +306,11 @@ def get_table_cells_color():
                                 image_index = 0
 
         # 如果是检查部位，则开始遍历当前页面的所有图片，保存符合条件的图片
-        if check_part_name and check_part_name in check_part_name_list:
-            # 遍历每一页PDF的图片列表
-            for image_index, cell_images in enumerate(page_image_list):
-
+        for image_index, cell_images in enumerate(page_image_list):
+            if check_part_name:
+                # 遍历每一页PDF的图片列表
                 # 定义问题点图片文件的存储名称
-                cell_file_name = f'page-{page_num + 1}-{check_part_name}-count-{  image_index  + 1}-{dt}.png'
+                cell_file_name = f'page-{page_num + 1}-{check_part_name}-count-{image_index + 1}-{dt}.png'
                 # 循环替换特殊字符
                 for special_char in replace_symbol_list:
                     cell_file_name = cell_file_name.replace(special_char, '_')
@@ -334,8 +332,14 @@ def get_table_cells_color():
                     print('image_path:', image_path)
                 pix = None
                 continue
+            else:
+                pix_image_list.append(cell_images)
+                cell_data_list.append({'pix_image_list': pix_image_list})
+                print('pix_image_list length:', len(pix_image_list))
         # 如果结束处理页码等于当前页面的页码，则结束循环
         if end_page == page_num and start_index == 0:
+            break
+        elif rows[i] == check_part_name:
             break
     # 返回整合后的数据
     return cell_data_list
