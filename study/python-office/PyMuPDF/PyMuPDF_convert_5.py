@@ -147,6 +147,7 @@ def get_images_in_pdf_1(pdf_doc):
 def get_images_in_pdf_2(pdf_doc):
     # 定义图片计数变量
     image_count = 0
+
     # 创建图片存放目录
     pixmap_images_dir = "pixmap_images"
     if not os.path.exists(pixmap_images_dir):
@@ -176,19 +177,16 @@ def get_images_in_pdf_2(pdf_doc):
             continue
         # 计数器累加
         image_count += 1
-        # print('doc_xref:', doc_xref)
         # 获取当前交叉引用表节点的文本
         img_dict = pdf_doc.extract_image(doc_xref)
-
-        # img_dict = dict(img_dict)
-        print('img_dict:', img_dict)
+        # 获取当前交叉引用表节点的图片
         img_data = img_dict['image']
-        # print('img_data:', img_data)
+        # 获取当前交叉引用表节点的图片尺寸
         img_size = img_dict["width"], img_dict["height"]
+        # 判断色彩空间和模式
         img_colorspace = "RGB" if img_dict["colorspace"] == "/DeviceRGB" else "CMYK"
-        #
         # 定义符合条件的图片文件存储名称
-        pixmap_file_name = pixmap_images_dir + '/' + f'image-xref-{doc_xref}-time-{dt}-size-{img_size}-colorspace-{img_colorspace}.png'
+        pixmap_file_name = pixmap_images_dir + '/' + f'image-{image_count}-{doc_xref}-time-{dt}-size-{img_size}-colorspace-{img_colorspace}.png'
         #
         # 循环替换特殊字符
         for special_char in replace_symbol_list:
