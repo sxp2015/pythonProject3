@@ -1,18 +1,10 @@
 import os  # 处理文件和目录路径相关的功能
+import pathlib
 import re
-import struct
-from collections import Counter
-from pprint import pprint
-
-import fitz  # 操作 PDF 文件的库 PyMuPDF
-import io  # 读取二进制数据的库
-
-import numpy as np
-from PIL import Image  # 处理图片的库
-import tabula  # 读取表格数据的库
-import pandas as pd  # 处理表格数据的库
+import sys
 from datetime import datetime
-from openpyxl import Workbook
+from pprint import pprint
+import fitz  # 操作 PDF 文件的库 PyMuPDF
 
 # PDF 文件路径
 pdf_file_path = os.path.join('pdf_files/查验报告.pdf')
@@ -197,12 +189,20 @@ def get_images_in_pdf_2(pdf_doc):
             f.write(img_data)
 
 
-def get_texts_in_pdf(pdf_doc):
+def get_images_in_pdf_3(pdf_doc):
     for page_num, page in enumerate(pdf_doc):
         d = page.get_text("dict")
         blocks = d["blocks"]
+        # 图片块
         img_blocks = [b for b in blocks if b["type"] == 1]
+        # 文本块
+        text_blocks = [b for b in blocks if b["type"] == 2]
+        # 路径块
+        rect_blocks = [b for b in blocks if b["type"] == 3]
+
         pprint(img_blocks[0])
+        # pprint(text_blocks[0])
+        # pprint(rect_blocks[0])
         print({'bbox': img_blocks[0]['bbox'],
                'bpc': img_blocks[0]['bpc'],
                'colorspace': img_blocks[0]['colorspace'],
@@ -217,7 +217,23 @@ def get_texts_in_pdf(pdf_doc):
                'yres': img_blocks[0]['yres']})
 
 
+def get_texts_in_pdf_1(pdf_doc):
+    # 创建文字存放目录
+    extract_texts_dir = "extract_texts"
+    if not os.path.exists(extract_texts_dir):
+        os.mkdir(extract_texts_dir)
+        """
+        chr(12) 表示ASCII码值为12的字符，也称为换页符（Form Feed，简写为 FF）。在打印机时代，换页符通常用于在打印机上分隔纸张。在这里，
+        换页符被用作页面文本内容的分隔符，以便在将文本内容写入新的文本文件时，可以轻松地分隔每个页面的文本内容
+        """
+
+    with fitz.open(pdf_doc) as document:  # open document
+        text = chr(12).join([page.get_text() for page in document])
+        # write as a binary file to support non-ASCII characters
+        pathlib.Path(extract_texts_dir + f'/text-{dt} + .txt').write_bytes(text.encode())
+
+
 if __name__ == "__main__":
     # print('get_images_in_pdf-1返回结果：', get_images_in_pdf_1(doc))
-    print('get_images_in_pdf-2返回结果：', get_images_in_pdf_2(doc))
-    # print('get_texts_in_pdf-返回结果：', get_texts_in_pdf(doc))
+    # print('get_images_in_pdf-2返回结果：', get_images_in_pdf_2(doc))
+    print('get_texts_in_pdf-返回结果：', get_texts_in_pdf_1(doc))
