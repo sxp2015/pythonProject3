@@ -257,9 +257,11 @@ def get_texts_in_pdf_2(pdf_doc):
             if 'rect' in shape:
                 # 根据矩形区域判断是否为表格
                 x0, y0, x1, y1 = shape['rect']
-                if x1 - x0 > 50 and y1 - y0 > 50:
+                if x1 - x0 > 50 and y1 - y0 > 20:
                     # 获取表格的矩形区域
                     table_rect = fitz.Rect(shape['rect'])
+
+                    rectangle_text = page.get_textbox(table_rect)
 
                     # 获取表格的宽度和高度
                     table_width = table_rect.width
@@ -267,6 +269,7 @@ def get_texts_in_pdf_2(pdf_doc):
 
                     # 从表格中提取文字内容
                     table_text = ""
+
                     for block_index, block in enumerate(block_list):
                         """
                         我们可以使用fitz.Rect()方法创建一个矩形对象，并使用intersects()方法判断该矩形对象是否与当前文本块相交。
@@ -279,10 +282,13 @@ def get_texts_in_pdf_2(pdf_doc):
                     table_image = page.get_pixmap(matrix=fitz.Matrix(1, 1), clip=table_rect)
 
                     # 打印表格的宽度、高度、图片和文字
-                    print(f"Table width: {table_width}")
-                    print(f"Table height: {table_height}")
-                    table_image.save(draw_pdf_dir + f'/image-{dt}-table.png')
-                    print(f"Table text: {table_text}")
+                    print('table_rect-1', table_rect)
+                    print(f"Table width-2: {table_width}")
+                    print(f"Table height-3: {table_height}")
+                    # table_image.save(draw_pdf_dir + f'/image-{dt}-table.png')
+                    print(f"Table text-4: {table_text}")
+                    # if rectangle_text:
+                    #     print(f"rectangle_text-5: {rectangle_text}")
 
         # # 遍历每一页的每一行文本
         # for i, row in enumerate(rows):
