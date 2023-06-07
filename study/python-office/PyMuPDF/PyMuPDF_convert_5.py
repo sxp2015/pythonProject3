@@ -233,7 +233,74 @@ def get_texts_in_pdf_1(pdf_doc):
         pathlib.Path(extract_texts_dir + f'/text-{dt} + .txt').write_bytes(text.encode())
 
 
+def get_texts_in_pdf_2(pdf_doc):
+    width = 200  # 单元格宽度，单位为磅
+    height = 60  # 单元格高度，单位为磅
+
+    # 创建文字存放目录
+    draw_pdf_dir = "draw_pdf_texts"
+    if not os.path.exists(draw_pdf_dir):
+        os.mkdir(draw_pdf_dir)
+
+    for page_num, page in enumerate(pdf_doc):
+
+        # 获取所有页面的文本内容
+        rows = page.get_text().split("\n")
+
+        # 遍历每一页的每一行文本
+        for i, row in enumerate(rows):
+            row_positions = page.search_for(row)
+            if row_positions is None:
+                continue
+            else:
+                for row_position_index, row_position in enumerate(row_positions):
+
+                    if len(row_position):
+                        # 获取页面的文本去除两边的空格
+                        text = page.get_textbox(row_position).strip()
+                        # 判断文本内容是否为空或数字的情况
+                        if text is not None and text != "空" and not text.isdigit():
+                            # print("文本：", text)
+                            print("*" * 20)
+                        # 如果参数数量为4，则表示一个图像或图像区域
+                        images = page.get_images(row_position)
+                        # print('image', images)
+                        # image.save("image.png")
+                        print("*" * 20)
+
+                        rect = fitz.Rect(row_position[:4])
+
+                        print('width:', rect.width, 'height:', rect.height)
+                        if rect.width > width or rect.height > height:
+                            text_rect = page.get_textbox(rect)
+                            print('text_rect:', text_rect)
+                        # draw_rect = page.draw_rect(rect, color=(1, 0, 0), width=2)
+                        # print('draw_rect:', draw_rect)
+
+                        # 计算文本框的宽度和高度
+                        textbox_width = rect[2] - rect[0]
+                        textbox_height = rect[3] - rect[1]
+                        rect2 = fitz.Rect(rect[0], rect[1], textbox_width, textbox_height)
+                        draw_rect2 = page.draw_rect(rect2, color=(1, 0, 1), width=2)
+                        # print('textbox_width:', textbox_width)
+                        # print('textbox_height:', textbox_height)
+                        # print('draw_rect:', draw_rect2)
+                        # 判断文本框是否为固定宽度和高度
+                        if textbox_width == width and textbox_height == height:
+                            # 获取文本框中的文本内容
+                            text = row_position[4]
+                            # print('text', text)
+                            print("*" * 20)
+
+            # 判断是否为空行
+            if len(row) == 0 or isinstance(row, int) or row is None:
+                continue
+
+    # pdf_doc.save(draw_pdf_dir + f'/text-{dt}.pdf')
+
+
 if __name__ == "__main__":
     # print('get_images_in_pdf-1返回结果：', get_images_in_pdf_1(doc))
     # print('get_images_in_pdf-2返回结果：', get_images_in_pdf_2(doc))
-    print('get_texts_in_pdf-返回结果：', get_texts_in_pdf_1(doc))
+    # print('get_texts_in_pdf_1-返回结果：', get_texts_in_pdf_1(doc))
+    print('get_texts_in_pdf_2-返回结果：', get_texts_in_pdf_2(doc))
