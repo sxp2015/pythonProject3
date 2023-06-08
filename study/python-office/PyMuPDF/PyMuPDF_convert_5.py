@@ -234,14 +234,15 @@ def get_texts_in_pdf_1(pdf_doc):
 
 
 def get_texts_in_pdf_2(pdf_doc):
-    width = 200  # 单元格宽度，单位为磅
-    height = 60  # 单元格高度，单位为磅
+    # 创建检查部位图片的存放目录
+    check_part_images_dir = "check_part_images"
+    if not os.path.exists(check_part_images_dir):
+        os.mkdir(check_part_images_dir)
 
-    # 创建文字存放目录
-    draw_pdf_dir = "draw_pdf_texts"
-    if not os.path.exists(draw_pdf_dir):
-        os.mkdir(draw_pdf_dir)
+    # 检查部位的变量列表
+    check_part_text_list = []
 
+    # 遍历每一页PDF
     for page_num, page in enumerate(pdf_doc):
         # 获取当前页中所有的图形对象和文本块
         shape_list = page.get_drawings()
@@ -258,111 +259,72 @@ def get_texts_in_pdf_2(pdf_doc):
                 table_rect = fitz.Rect(shape['rect'])
                 table_word = page.get_textbox(table_rect)
 
-                # 不是检查部位的情况
-                if x1 - x0 > 260 and y1 - y0 > 200:
+                # 检查部位独占一行的情况,不要最后两页，以及第一页的描述内容
+                if x1 - x0 >= 530 and y1 - y0 >= 40 and page_num + 1 not in [18, 19] \
+                        and not str(table_word).strip().startswith('【'):
+                    # 通过矩形的左上角和右下角的坐标判断检查部位的单元格，如果矩形是独占一行且没有1
+                    if table_rect[0] == 29.75 and table_rect[2] == 565.25 and str(table_word) != '1':
+                        # 提取矩形的文字给检查部位的变量
+                        check_part = page.get_textbox(table_rect)
+                        # 按检查部位分类创建目录
+                        check_part_dir_name = check_part_images_dir + '/' + str(page_num + 1) + '-' + check_part
+                        if not os.path.exists(check_part_dir_name) and check_part != '建议与说明':
+                            os.mkdir(check_part_dir_name)
+                        # 把检查部位的数据添加到列表
+                        check_part_text_list.append(check_part)
+                        # 遍历到最后断开循环
+                        if '建议与说明' in check_part:
+                            break
+                        # print(f"检查部位: {check_part}")
 
+                    # 不是检查部位的情况
+
+                if x1 - x0 > 260 and y1 - y0 > 200:
                     # 从表格中提取文字内容
                     table_text_list = []
 
-                    for block in block_list:
+                    for block_index, block in enumerate(block_list):
                         """
                         我们可以使用fitz.Rect()方法创建一个矩形对象，并使用intersects()方法判断该矩形对象是否与当前文本块相交。
                         如果相交，则将该文本块的内容添加到table_text_list变量中。
                         """
                         if table_rect.intersects(fitz.Rect(block[:4])):
                             block_text = str(block[4]).strip()  # 获取文本块的内容，并去除首尾空格
-                            if block_text and block_text not in ['空', '1', '',
-                                                                 ' ', '\t',
-                                                                 '\n'] and not block_text.isdigit():  # 排除空文本和数字
+                            # 定义特殊字符，排除空文本和数字
+                            special_chart = ['空', '1', '', ' ', '\t', '\n']
+                            if block_text and block_text not in special_chart and not block_text.isdigit():
+                                # 添加到列表
                                 table_text_list.append(block_text)
 
-                    # 提取单元格中的文字
-                    table_text = "\n".join(table_text_list)
+                            # 提取单元格中的文字
+                            table_text = "\n".join(table_text_list)
+                            # print('table_text', table_text)
+                            print('table_text_list', table_text_list)
 
-                    # 从表格中提取图片
-                    table_image = page.get_pixmap(matrix=fitz.Matrix(1, 1), clip=table_rect)
+                        # 如果矩形与文本没有相交，说明是图片
+                        else:
+                            # 判断检查单元格中是否有图片
+                            if len(table_text_list) != 0 and '\u3000' not in table_text_list[0] \
+                                    and '【' not in table_text_list[0] and 'image' in table_text_list[0]:
+                                # 从表格中提取图片
+                                table_image = page.get_pixmap(matrix=fitz.Matrix(1, 1), colorspace=fitz.csRGB,
+                                                              clip=table_rect)
+                                image_name = check_part_images_dir + '/' + '2-' + check_part_text_list[0] \
+                                             + f'/page{page_num + 1}-image-{block_index + 1}-{dt}-table.png'
+                                # 保存图片
+                                table_image.save(image_name)
+                                # print(f"table_text_list: {table_text_list}")
 
-                    # 打印表格的宽度、高度、图片和文字
-                    # print('table_rect-1', table_rect)
-                    # print('table_text-1', table_text)
-                    #  print("*" * 20)
-                    # print(f"Table width-2: {table_rect.width}")
-                    # print(f"Table height-3: {table_rect.height}")
-                    # table_image.save(draw_pdf_dir + f'/image-{dt}-table.png')
+                                # print("*" * 20)
+                                # print("table_image", table_image)
 
-                    # 判断检出问题的单元格
-                    if len(table_text_list) != 0 and '\u3000' not in table_text_list[0] \
-                            and '【' not in table_text_list[0] and 'image' not in table_text_list[0]:
-                        # print(f"table_text_list: {table_text_list}")
-                        print("*" * 20)
-
-                # 检查部位独占一行的情况,不要最后两页，以及第一页的描述内容
-                if x1 - x0 >= 530 and y1 - y0 >= 40 and page_num + 1 not in [18, 19]\
-                        and not str(table_word).strip().startswith('【'):
-                    # 判断检查部位的单元格，如果矩形是独占一行且没有1
-                    if table_rect[0] == 29.75 and table_rect[2] == 565.25 and str(table_word) != '1':
-                        # 提取矩形的文字给变量
-                        check_part = page.get_textbox(table_rect)
-                        # 遍历到最后断开循环
-                        if '建议与说明' in check_part:
-                            break
-                        print(f"检查部位: {check_part}")
-
-                    # print("*" * 20)
-
-        # # 遍历每一页的每一行文本
-        # for i, row in enumerate(rows):
-        #     row_positions =page.get_drawings()
-        #     if row_positions is None:
-        #         continue
-        #     else:
-        #
-        #         print('row_position', row_positions)
-        #
-        #         for row_position_index, row_position in enumerate(row_positions):
-        #
-        #             if len(row_position):
-        #                 # 获取页面的文本去除两边的空格
-        #                 text = page.get_textbox(row_position).strip()
-        #                 # 判断文本内容是否为空或数字的情况
-        #                 if text is not None and text != "空" and not text.isdigit():
-        #                     # print("文本：", text)
-        #                     print("*" * 20)
-        #                 # 如果参数数量为4，则表示一个图像或图像区域
-        #                 images = page.get_images(row_position)
-        #                 # print('image', images)
-        #                 # image.save("image.png")
-        #                 print("*" * 20)
-        #
-        #                 rect = fitz.Rect(row_position[:4])
-        #
-        #                 print('width:', rect.width, 'height:', rect.height)
-        #                 if rect.width > width or rect.height > height:
-        #                     text_rect = page.get_textbox(rect)
-        #                     print('text_rect:', text_rect)
-        #                 # draw_rect = page.draw_rect(rect, color=(1, 0, 0), width=2)
-        #                 # print('draw_rect:', draw_rect)
-        #
-        #                 # 计算文本框的宽度和高度
-        #                 textbox_width = rect[2] - rect[0]
-        #                 textbox_height = rect[3] - rect[1]
-        #                 rect2 = fitz.Rect(rect[0], rect[1], textbox_width, textbox_height)
-        #                 draw_rect2 = page.draw_rect(rect2, color=(1, 0, 1), width=2)
-        #                 # print('textbox_width:', textbox_width)
-        #                 # print('textbox_height:', textbox_height)
-        #                 # print('draw_rect:', draw_rect2)
-        #                 # 判断文本框是否为固定宽度和高度
-        #                 if textbox_width == width and textbox_height == height:
-        #                     # 获取文本框中的文本内容
-        #                     text = row_position[4]
-        #                     # print('text', text)
-        #                     print("*" * 20)
-        #
-        #     # 判断是否为空行
-        #     if len(row) == 0 or isinstance(row, int) or row is None:
-        #         continue
-
-    # pdf_doc.save(draw_pdf_dir + f'/text-{dt}.pdf')
+                        # 打印表格的宽度、高度、图片和文字
+                        # print('table_rect-1', table_rect)
+                        # print('table_text-1', table_text)
+                        #  print("*" * 20)
+                        # print(f"Table width-2: {table_rect.width}")
+                        # print(f"Table height-3: {table_rect.height}")
+                        # table_image.save(draw_pdf_dir + f'/image-{dt}-table.png')
 
 
 if __name__ == "__main__":
