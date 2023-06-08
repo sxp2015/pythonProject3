@@ -296,16 +296,14 @@ def get_texts_in_pdf_2(pdf_doc):
                         # print(f"table_text_list: {table_text_list}")
                         print("*" * 20)
 
-                        # print("*" * 20)
-                    # print(f"Table text: {table_text}")
-                    # if rectangle_text:
-                    #     print(f"rectangle_text-5: {rectangle_text}")
-                # 检查部位独占一行的情况
-                if x1 - x0 >= 530 and y1 - y0 >= 40 and len(table_word) != 15 and page_num + 1 not in [18, 19]\
+                # 检查部位独占一行的情况,不要最后两页，以及第一页的描述内容
+                if x1 - x0 >= 530 and y1 - y0 >= 40 and page_num + 1 not in [18, 19]\
                         and not str(table_word).strip().startswith('【'):
-                    # 判断检查部位的单元格
+                    # 判断检查部位的单元格，如果矩形是独占一行且没有1
                     if table_rect[0] == 29.75 and table_rect[2] == 565.25 and str(table_word) != '1':
+                        # 提取矩形的文字给变量
                         check_part = page.get_textbox(table_rect)
+                        # 遍历到最后断开循环
                         if '建议与说明' in check_part:
                             break
                         print(f"检查部位: {check_part}")
