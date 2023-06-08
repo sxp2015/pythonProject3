@@ -243,10 +243,6 @@ def get_texts_in_pdf_2(pdf_doc):
         os.mkdir(draw_pdf_dir)
 
     for page_num, page in enumerate(pdf_doc):
-
-        # 获取所有页面的文本内容
-        rows = page.get_text().split("\n")
-
         # 获取当前页中所有的图形对象和文本块
         shape_list = page.get_drawings()
         block_list = page.get_text_blocks()
@@ -257,38 +253,64 @@ def get_texts_in_pdf_2(pdf_doc):
             if 'rect' in shape:
                 # 根据矩形区域判断是否为表格
                 x0, y0, x1, y1 = shape['rect']
-                if x1 - x0 > 50 and y1 - y0 > 20:
-                    # 获取表格的矩形区域
-                    table_rect = fitz.Rect(shape['rect'])
 
-                    rectangle_text = page.get_textbox(table_rect)
+                # 获取表格的矩形区域
+                table_rect = fitz.Rect(shape['rect'])
+                table_word = page.get_textbox(table_rect)
 
-                    # 获取表格的宽度和高度
-                    table_width = table_rect.width
-                    table_height = table_rect.height
+                # 不是检查部位的情况
+                if x1 - x0 > 260 and y1 - y0 > 200:
 
                     # 从表格中提取文字内容
-                    table_text = ""
+                    table_text_list = []
 
-                    for block_index, block in enumerate(block_list):
+                    for block in block_list:
                         """
                         我们可以使用fitz.Rect()方法创建一个矩形对象，并使用intersects()方法判断该矩形对象是否与当前文本块相交。
-                        如果相交，则将该文本块的内容添加到table_text变量中。
+                        如果相交，则将该文本块的内容添加到table_text_list变量中。
                         """
                         if table_rect.intersects(fitz.Rect(block[:4])):
-                            table_text += block[4] + " "
+                            block_text = str(block[4]).strip()  # 获取文本块的内容，并去除首尾空格
+                            if block_text and block_text not in ['空', '1', '',
+                                                                 ' ', '\t',
+                                                                 '\n'] and not block_text.isdigit():  # 排除空文本和数字
+                                table_text_list.append(block_text)
+
+                    # 提取单元格中的文字
+                    table_text = "\n".join(table_text_list)
 
                     # 从表格中提取图片
                     table_image = page.get_pixmap(matrix=fitz.Matrix(1, 1), clip=table_rect)
 
                     # 打印表格的宽度、高度、图片和文字
-                    print('table_rect-1', table_rect)
-                    print(f"Table width-2: {table_width}")
-                    print(f"Table height-3: {table_height}")
+                    # print('table_rect-1', table_rect)
+                    # print('table_text-1', table_text)
+                    #  print("*" * 20)
+                    # print(f"Table width-2: {table_rect.width}")
+                    # print(f"Table height-3: {table_rect.height}")
                     # table_image.save(draw_pdf_dir + f'/image-{dt}-table.png')
-                    print(f"Table text-4: {table_text}")
+
+                    # 判断检出问题的单元格
+                    if len(table_text_list) != 0 and '\u3000' not in table_text_list[0] \
+                            and '【' not in table_text_list[0] and 'image' not in table_text_list[0]:
+                        # print(f"table_text_list: {table_text_list}")
+                        print("*" * 20)
+
+                        # print("*" * 20)
+                    # print(f"Table text: {table_text}")
                     # if rectangle_text:
                     #     print(f"rectangle_text-5: {rectangle_text}")
+                # 检查部位独占一行的情况
+                if x1 - x0 >= 530 and y1 - y0 >= 40 and len(table_word) != 15 and page_num + 1 not in [18, 19]\
+                        and not str(table_word).strip().startswith('【'):
+                    # 判断检查部位的单元格
+                    if table_rect[0] == 29.75 and table_rect[2] == 565.25 and str(table_word) != '1':
+                        check_part = page.get_textbox(table_rect)
+                        if '建议与说明' in check_part:
+                            break
+                        print(f"检查部位: {check_part}")
+
+                    # print("*" * 20)
 
         # # 遍历每一页的每一行文本
         # for i, row in enumerate(rows):
