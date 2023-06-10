@@ -252,7 +252,9 @@ def get_texts_in_pdf_2(pdf_doc):
 
     # 从表格中提取文字内容列表
     table_text_list = []
-
+    table_text = None
+    # 定义当前单元格的内容
+    table_word = None
     # 当前的文本块内容
     current_block_text = None
 
@@ -264,15 +266,12 @@ def get_texts_in_pdf_2(pdf_doc):
 
     # 定义当前遍历到的矩形
     table_rect = None
-    # 定义当前单元格的内容
-    table_word = None
+
     # 定义矩形坐标
     x0, y0, x1, y1 = 0, 0, 0, 0
     # 定义通用判断条件
     common_condition = None
     # 定义图片文件保存路及图片文件名称
-
-    table_text_status = None
 
     image_file_dir = None
     image_file_name_list = []
@@ -283,7 +282,7 @@ def get_texts_in_pdf_2(pdf_doc):
         shape_list = page.get_drawings()
         block_list = page.get_text_blocks()
         image_list = page.get_images()
-
+        cell_text = None
         name_index = 0
         file_name = None
 
@@ -330,6 +329,8 @@ def get_texts_in_pdf_2(pdf_doc):
                     # 判断保存的名称：
                     if table_word and str(table_word).strip() != '空' and table_word != check_part:
                         image_file_name = str(image_file_dir + table_word) + f'-{dt}.png'
+                        table_text = table_word
+                        table_text_list.append(table_text)
                         image_file_name_list.append(image_file_name)
 
                     # print('len(image_file_name_list)', len(image_file_name_list))
@@ -373,40 +374,61 @@ def get_texts_in_pdf_2(pdf_doc):
 
         # 遍历文本块列表
         for block_index, block in enumerate(block_list):
+            # 定义检查部位的文字
+            check_part = None
+
             block_image = block[4]
             block_x0, block_y0, block_x1, block_y1 = block[:4]
             block_rect = fitz.Rect(block_x0, block_y0, block_x1, block_y1)
 
             cell_text_list = str(block_image).strip().split('\n')
 
+            # 通用判断条件:独占一行不含1并且不含建议说明，不要最后两页，以及第一页的描述内容
+            block_common_condition = page_num + 1 not in [18, 19] \
+                                     and not str(block_image).strip().startswith('【') \
+                                     and str(block_image) not in ['1', '建议与说明']
+
+            # 检查部位独占一行的情况
+            # if block_x1 - block_x0 >= 530 and block_y1 - block_y0 >= 40:
+            #     # 提取矩形的文字给检查部位的变量
+            #     check_part = page.get_textbox(block_rect)
+
+            # 定义图片保存名称
+
             for cell_text_index, cell_text in enumerate(cell_text_list):
-                print('cell_text', cell_text)
+                # print(f'index-{cell_text_index}-value-{cell_text}')
                 # print('block_image', block_image)
 
-            if 'image' in block_image:
-                # 生成随机的 4 位正整数
-                random_num = random.randint(1000, 9999)
-                # rect = page.search_for(block_rect)
-                pix = page.get_pixmap(matrix=fitz.Identity, colorspace=fitz.csRGB, clip=block_rect, alpha=False,
-                                      dpi=200)
-                # print('Width:', pix.width)
-                # print('Height:', pix.height)
+                if str(cell_text).strip() != '空' and (page_num + 1) not in [1, 18, 19] \
+                        and not str(cell_text).strip().startswith('【') \
+                        and str(cell_text) not in ['1', '建议与说明']:
+                    # print('cell_text', cell_text)
+                    # print('table_text', table_text)
+                    print('-' * 40)
 
-                if pix and pix.n < 5 and pix.width >= 730 and pix.height >= 550:
+                if 'image' in cell_text:
+                    # 生成随机的 4 位正整数
+                    random_num = random.randint(1000, 9999)
+                    # rect = page.search_for(block_rect)
+                    pix = page.get_pixmap(matrix=fitz.Identity, colorspace=fitz.csRGB, clip=block_rect, alpha=False,
+                                          dpi=200)
                     # print('Width:', pix.width)
                     # print('Height:', pix.height)
-                    # 输出像素图
-                    # 定义图片保存路径
-                    image_file_dir = f'{check_part_dir_name}page{page_num + 1}-{block_index}-{random_num}-{dt}.png'
-                    # 保存图片
-                    # print('image_file_dir', image_file_dir)
-                    # pix.save(image_file_dir)
 
-                # print('文字:', block[4], '矩形宽度:', block_rect.width,
-                #       '矩形高度:', block_rect.height, '坐标:', block_rect)
-                # print('block_image', block_image)
-                # print('block_rect', block_rect)
-            # 查找单元格所在位置
+                    if pix and pix.n < 5 and pix.width >= 730 and pix.height >= 550:
+                        # print('Width:', pix.width)
+                        # print('Height:', pix.height)
+                        # 输出像素图
+                        # 定义图片保存路径
+                        image_file_dir = f'{check_part_dir_name}-{table_text}-{page_num + 1}-{block_index}-{random_num}-{dt}.png'
+                        # 保存图片
+                        print('image_file_dir', image_file_dir)
+                        # pix.save(image_file_dir)
+
+                    # print('文字:', block[4], '矩形宽度:', block_rect.width,
+                    #       '矩形高度:', block_rect.height, '坐标:', block_rect)
+                    # print('block_image', block_image)
+                    # print('block_rect', block_rect)
 
     return table_text_list, check_part_text_list
 
