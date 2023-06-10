@@ -6,6 +6,7 @@ import sys
 from datetime import datetime
 from pprint import pprint
 import fitz  # 操作 PDF 文件的库 PyMuPDF
+import itertools
 
 # PDF 文件路径
 from PIL import Image
@@ -270,10 +271,10 @@ def get_texts_in_pdf_2(pdf_doc):
     common_condition = None
     # 定义图片文件保存路及图片文件名称
 
-    image_file_name = None
+    table_text_status = None
 
-    # 定义图片编号索引
-    image_index = 0
+    image_file_dir = None
+    image_file_name_list = []
 
     # 遍历每一页PDF
     for page_num, page in enumerate(pdf_doc):
@@ -282,20 +283,8 @@ def get_texts_in_pdf_2(pdf_doc):
         block_list = page.get_text_blocks()
         image_list = page.get_images()
 
-        # 遍历图片列表
-        for image_index, image in enumerate(image_list):
-            # 一个图片对象中获取了图片在文档中的位置信息，即 xref。
-            xref = image[0]
-            pix = fitz.Pixmap(pdf_doc, xref)
-            if pix.n < 5 and pix.w >= 1500 and pix.h >= 1100:
-                # 图片索引加一
-                image_index += 1
-                # 保存图片到本地
-                if image_file_name:
-                    # 将满足要求的图片保存到本地
-                    pix.save(image_file_name + f'-{image_index}-{dt}.png')
-                # 释放 Pixmap 对象及其资源
-            pix = None
+        name_index = 0
+        file_name = None
 
         # 遍历每个图形对象
         for shape_index, shape in enumerate(shape_list):
@@ -322,25 +311,64 @@ def get_texts_in_pdf_2(pdf_doc):
                     # 提取矩形的文字给检查部位的变量
                     check_part = page.get_textbox(table_rect)
                     # 按检查部位分类创建目录
-                    check_part_dir_name = check_part_images_dir + '/' + str(page_num + 1) + '-' + check_part
+                    check_part_dir_name = check_part_images_dir + '/' + str(page_num + 1) + '-' + check_part + '/'
                     if not os.path.exists(check_part_dir_name):
                         os.mkdir(check_part_dir_name)
 
                     # 定义图片保存路径
-                    image_file_name = f"{check_part_dir_name}/{page_num + 1}-{check_part}"
+                    image_file_dir = check_part_dir_name
                     # 把检查部位的数据添加到列表
                     check_part_text_list.append(check_part)
-                else:
-                    continue
 
                     # print(f"检查部位1: {check_part}")
 
                     # 如果是一行两列的情况
+
                 if x1 - x0 > 260 and y1 - y0 > 25 and common_condition:
 
                     # 判断保存的名称：
                     if table_word and str(table_word).strip() != '空' and table_word != check_part:
+                        image_file_name = str(image_file_dir + table_word) + f'-{dt}.png'
+                        image_file_name_list.append(image_file_name)
+
+                        print('len(image_file_name_list)', len(image_file_name_list))
                         print('---' * 10)
+                    table_text_status = True
+                    # print('table_word', table_word)
+                    # print('file_name', image_file_name)
+                    # print('image_file_name_list', image_file_name_list)
+                    # print('_list_length', len(image_file_name_list))
+
+                    # 保存图片
+
+        # 遍历每一页的图片列表
+        if image_list and image_file_name_list:
+
+            # 遍历每页的图片对象列表
+            for image_index, image in enumerate(image_list):
+                # 一个图片对象中获取了图片在文档中的位置信息，即 xref。
+                xref = image[0]
+
+                for image_file_index, image_file_name in enumerate(image_file_name_list):
+                    image_index = image_file_index
+                    file_name = image_file_name
+                    print(f'image_file_index:{name_index},image_file_name:{image_file_name}')
+                    continue
+
+                # 遍历文件名列表
+                if image_index < len(image_file_name_list):
+                    pix = fitz.Pixmap(pdf_doc, xref)
+                    # 如果pix对象有值且宽和高符合要求，并且不是当前项，则保存图片
+                    if pix and pix.n < 5 and pix.w >= 1500 and pix.h >= 1100:
+                        print('image_file_name:', file_name)
+                        print('--' * 20)
+                        # pix.save(file_name)
+                        # 把文件名置空
+                    # 释放 Pixmap 对象及其资源
+                    pix = None
+                else:
+                    file_name = None
+                    continue
 
     return table_text_list, check_part_text_list
 
