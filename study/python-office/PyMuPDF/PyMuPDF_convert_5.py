@@ -1,6 +1,7 @@
 import json
 import os  # 处理文件和目录路径相关的功能
 import pathlib
+import random
 import re
 import sys
 from datetime import datetime
@@ -331,9 +332,9 @@ def get_texts_in_pdf_2(pdf_doc):
                         image_file_name = str(image_file_dir + table_word) + f'-{dt}.png'
                         image_file_name_list.append(image_file_name)
 
-                        print('len(image_file_name_list)', len(image_file_name_list))
-                        print('---' * 10)
-                    table_text_status = True
+                    # print('len(image_file_name_list)', len(image_file_name_list))
+                    print('---' * 10)
+
                     # print('table_word', table_word)
                     # print('file_name', image_file_name)
                     # print('image_file_name_list', image_file_name_list)
@@ -352,7 +353,7 @@ def get_texts_in_pdf_2(pdf_doc):
                 for image_file_index, image_file_name in enumerate(image_file_name_list):
                     image_index = image_file_index
                     file_name = image_file_name
-                    print(f'image_file_index:{name_index},image_file_name:{image_file_name}')
+                    # print(f'image_file_index:{name_index},image_file_name:{image_file_name}')
                     continue
 
                 # 遍历文件名列表
@@ -360,7 +361,7 @@ def get_texts_in_pdf_2(pdf_doc):
                     pix = fitz.Pixmap(pdf_doc, xref)
                     # 如果pix对象有值且宽和高符合要求，并且不是当前项，则保存图片
                     if pix and pix.n < 5 and pix.w >= 1500 and pix.h >= 1100:
-                        print('image_file_name:', file_name)
+                        # print('image_file_name:', file_name)
                         print('--' * 20)
                         # pix.save(file_name)
                         # 把文件名置空
@@ -369,6 +370,43 @@ def get_texts_in_pdf_2(pdf_doc):
                 else:
                     file_name = None
                     continue
+
+        # 遍历文本块列表
+        for block_index, block in enumerate(block_list):
+            block_image = block[4]
+            block_x0, block_y0, block_x1, block_y1 = block[:4]
+            block_rect = fitz.Rect(block_x0, block_y0, block_x1, block_y1)
+
+            cell_text_list = str(block_image).strip().split('\n')
+
+            for cell_text_index, cell_text in enumerate(cell_text_list):
+                print('cell_text', cell_text)
+                # print('block_image', block_image)
+
+            if 'image' in block_image:
+                # 生成随机的 4 位正整数
+                random_num = random.randint(1000, 9999)
+                # rect = page.search_for(block_rect)
+                pix = page.get_pixmap(matrix=fitz.Identity, colorspace=fitz.csRGB, clip=block_rect, alpha=False,
+                                      dpi=200)
+                # print('Width:', pix.width)
+                # print('Height:', pix.height)
+
+                if pix and pix.n < 5 and pix.width >= 730 and pix.height >= 550:
+                    # print('Width:', pix.width)
+                    # print('Height:', pix.height)
+                    # 输出像素图
+                    # 定义图片保存路径
+                    image_file_dir = f'{check_part_dir_name}page{page_num + 1}-{block_index}-{random_num}-{dt}.png'
+                    # 保存图片
+                    # print('image_file_dir', image_file_dir)
+                    # pix.save(image_file_dir)
+
+                # print('文字:', block[4], '矩形宽度:', block_rect.width,
+                #       '矩形高度:', block_rect.height, '坐标:', block_rect)
+                # print('block_image', block_image)
+                # print('block_rect', block_rect)
+            # 查找单元格所在位置
 
     return table_text_list, check_part_text_list
 
