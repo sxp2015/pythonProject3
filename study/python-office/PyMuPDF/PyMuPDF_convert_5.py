@@ -1,3 +1,4 @@
+import json
 import os  # 处理文件和目录路径相关的功能
 import pathlib
 import re
@@ -7,6 +8,8 @@ from pprint import pprint
 import fitz  # 操作 PDF 文件的库 PyMuPDF
 
 # PDF 文件路径
+from PIL import Image
+
 pdf_file_path = os.path.join('pdf_files/查验报告.pdf')
 doc = fitz.open(pdf_file_path)
 
@@ -265,13 +268,34 @@ def get_texts_in_pdf_2(pdf_doc):
     x0, y0, x1, y1 = 0, 0, 0, 0
     # 定义通用判断条件
     common_condition = None
+    # 定义图片文件保存路及图片文件名称
+
+    image_file_name = None
+
+    # 定义图片编号索引
+    image_index = 0
 
     # 遍历每一页PDF
     for page_num, page in enumerate(pdf_doc):
         # 获取当前页中所有的图形对象和文本块
         shape_list = page.get_drawings()
         block_list = page.get_text_blocks()
-        page_images = page.get_images()
+        image_list = page.get_images()
+
+        # 遍历图片列表
+        for image_index, image in enumerate(image_list):
+            # 一个图片对象中获取了图片在文档中的位置信息，即 xref。
+            xref = image[0]
+            pix = fitz.Pixmap(pdf_doc, xref)
+            if pix.n < 5 and pix.w >= 1500 and pix.h >= 1100:
+                # 图片索引加一
+                image_index += 1
+                # 保存图片到本地
+                if image_file_name:
+                    # 将满足要求的图片保存到本地
+                    pix.save(image_file_name + f'-{image_index}-{dt}.png')
+                # 释放 Pixmap 对象及其资源
+            pix = None
 
         # 遍历每个图形对象
         for shape_index, shape in enumerate(shape_list):
@@ -301,8 +325,13 @@ def get_texts_in_pdf_2(pdf_doc):
                     check_part_dir_name = check_part_images_dir + '/' + str(page_num + 1) + '-' + check_part
                     if not os.path.exists(check_part_dir_name):
                         os.mkdir(check_part_dir_name)
+
+                    # 定义图片保存路径
+                    image_file_name = f"{check_part_dir_name}/{page_num + 1}-{check_part}"
                     # 把检查部位的数据添加到列表
                     check_part_text_list.append(check_part)
+                else:
+                    continue
 
                     # print(f"检查部位1: {check_part}")
 
@@ -311,15 +340,8 @@ def get_texts_in_pdf_2(pdf_doc):
 
                     # 判断保存的名称：
                     if table_word and str(table_word).strip() != '空' and table_word != check_part:
-                        print('table_word:', table_word)
+                        print('---' * 10)
 
-                    for image_index, image, in enumerate(page_images):
-                        xref = image[0]
-                        # 从指定的 PDF 文档中获取一个图片对象的像素图。 doc: 文档对象 ，xref:图片在文档中的位置信息/编号
-                        pix = fitz.Pixmap(pdf_doc, xref)
-                        if pix.w >= 1500 and pix.h >= 1100:
-                            pix.save(check_part_dir_name + '/' + f'page-{page_num + 1}' + table_word + f'{dt}' + '.png')
-                            print('---' * 10)
     return table_text_list, check_part_text_list
 
 
