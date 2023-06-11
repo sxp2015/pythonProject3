@@ -252,7 +252,7 @@ def get_texts_in_pdf_2(pdf_doc):
 
     # 从表格中提取文字内容列表
     table_text_list = []
-    table_text = None
+
     # 定义当前单元格的内容
     table_word = None
     # 当前的文本块内容
@@ -276,6 +276,13 @@ def get_texts_in_pdf_2(pdf_doc):
     image_file_dir = None
     image_file_name_list = []
 
+    # 定义一个函数从列表中取数据并且调用一次索引加1
+    def get_data_from_list(data_list):
+        index = 0  # 初始化索引值为 0
+        while True:
+            yield data_list[index]  # 返回当前项
+            index += 1  # 索引加一
+
     # 遍历每一页PDF
     for page_num, page in enumerate(pdf_doc):
         # 获取当前页中所有的图形对象和文本块
@@ -288,23 +295,25 @@ def get_texts_in_pdf_2(pdf_doc):
 
         # 遍历每个图形对象
         for shape_index, shape in enumerate(shape_list):
+            # print('shape_index:', shape_index, 'shape:', shape)
             # 如果当前图形对象包含矩形区域
             if 'rect' in shape:
                 # 根据矩形区域判断是否为表格
                 x0, y0, x1, y1 = shape['rect']
                 # 获取表格的矩形区域
                 table_rect = fitz.Rect(shape['rect'])
+                # print('table_rect:', table_rect)
 
                 # 获取表格单元格的文字
                 table_word = page.get_textbox(table_rect)
 
-                # 定义检查部位的文字
+                # # 定义检查部位的文字
                 check_part = None
 
                 # 通用判断条件:独占一行不含1并且不含建议说明，不要最后两页，以及第一页的描述内容
-                common_condition = page_num + 1 not in [18, 19] \
+                common_condition = page_num + 1 not in [1, 18, 19] \
                                    and not str(table_word).strip().startswith('【') \
-                                   and str(table_word) not in ['1', '建议与说明']
+                                   and str(table_word) not in ['1', '建议与说明'] and str(table_word).strip() != '空'
 
                 # 检查部位独占一行的情况
                 if x1 - x0 >= 530 and y1 - y0 >= 40 and common_condition:
@@ -314,121 +323,120 @@ def get_texts_in_pdf_2(pdf_doc):
                     check_part_dir_name = check_part_images_dir + '/' + str(page_num + 1) + '-' + check_part + '/'
                     if not os.path.exists(check_part_dir_name):
                         os.mkdir(check_part_dir_name)
-
                     # 定义图片保存路径
                     image_file_dir = check_part_dir_name
                     # 把检查部位的数据添加到列表
                     check_part_text_list.append(check_part)
+                    print(f"检查部位1: {check_part}")
+                table_text = ""
+                image_file_name = ""  # 添加这一行代码来初始化image_file_name
+                if x1 - x0 > 260 and y1 - y0 > 25 and table_word and table_word != check_part and common_condition:
+                    image_file_name = f'{image_file_dir}-{table_word}-page{page_num + 1}-{dt}.png'
+                    table_text = table_word
+                    table_text_list.append(table_text)
+                    image_file_name_list.append(image_file_name)
+                    # print('** image_file_name **:', image_file_name)
+                    # print('** table_word **:', table_word)
 
-                    # print(f"检查部位1: {check_part}")
-
-                    # 如果是一行两列的情况
-
-                if x1 - x0 > 260 and y1 - y0 > 25 and common_condition:
-
-                    # 判断保存的名称：
-                    if table_word and str(table_word).strip() != '空' and table_word != check_part:
-                        image_file_name = str(image_file_dir + table_word) + f'-{dt}.png'
-                        table_text = table_word
-                        table_text_list.append(table_text)
-                        image_file_name_list.append(image_file_name)
-
-                    # print('len(image_file_name_list)', len(image_file_name_list))
-                    print('---' * 10)
-
-                    # print('table_word', table_word)
-                    # print('file_name', image_file_name)
-                    # print('image_file_name_list', image_file_name_list)
-                    # print('_list_length', len(image_file_name_list))
-
-                    # 保存图片
+                # 获取图片并保存
+                if x1 - x0 > 260 and y1 - y0 > 200 and common_condition:
+                    pix = page.get_pixmap(matrix=fitz.Identity, colorspace=fitz.csRGB, clip=table_rect, alpha=False,
+                                          dpi=200)
+                    if pix and pix.n < 5 and pix.width >= 740 and pix.height >= 550:
+                        # 定义图片名称
+                        # image_file_name = f'{image_file_dir}-{table_text}-page{page_num + 1}-{dt}.png'
+                        if image_file_name_list:
+                            set_image_file_name_list = set(image_file_name_list)
+                            for name in set(set_image_file_name_list):
+                                if name:
+                                    pix.save(name)
+                                    print('** image_file_name **:', name)
+                    pix = None
+            continue
 
         # 遍历每一页的图片列表
-        if image_list and image_file_name_list:
-
-            # 遍历每页的图片对象列表
-            for image_index, image in enumerate(image_list):
-                # 一个图片对象中获取了图片在文档中的位置信息，即 xref。
-                xref = image[0]
-
-                for image_file_index, image_file_name in enumerate(image_file_name_list):
-                    image_index = image_file_index
-                    file_name = image_file_name
-                    # print(f'image_file_index:{name_index},image_file_name:{image_file_name}')
-                    continue
-
-                # 遍历文件名列表
-                if image_index < len(image_file_name_list):
-                    pix = fitz.Pixmap(pdf_doc, xref)
-                    # 如果pix对象有值且宽和高符合要求，并且不是当前项，则保存图片
-                    if pix and pix.n < 5 and pix.w >= 1500 and pix.h >= 1100:
-                        # print('image_file_name:', file_name)
-                        print('--' * 20)
-                        # pix.save(file_name)
-                        # 把文件名置空
-                    # 释放 Pixmap 对象及其资源
-                    pix = None
-                else:
-                    file_name = None
-                    continue
+        # if image_list and image_file_name_list:
+        #
+        #     def get_item(lst):
+        #         index = 0  # 初始化索引值为 0
+        #         while True:
+        #             yield lst[index]  # 返回当前项
+        #             index += 1  # 索引加一
+        #
+        #     # 遍历每页的图片对象列表
+        #     for image_index, image in enumerate(image_list):
+        #         # 一个图片对象中获取了图片在文档中的位置信息，即 xref。
+        #         xref = image[0]
+        #         pix = fitz.Pixmap(pdf_doc, xref)
+        #         # 如果pix对象有值且宽和高符合要求，并且不是当前项，则保存图片
+        #         if pix.n < 5 and pix.w >= 1500 and pix.h >= 1100:
+        #             # print('pix:', pix)
+        #             # print('image_file_name:', file_name)
+        #             # file_name = next(get_item(image_file_name_list))
+        #             # print('file_name:', file_name)
+        #             print('-' * 50)
+        #             #  pix.save(file_name)
+        #             # 把文件名置空
+        #         # 释放 Pixmap 对象及其资源
+        #         pix = None
 
         # 遍历文本块列表
-        for block_index, block in enumerate(block_list):
-            # 定义检查部位的文字
-            check_part = None
-
-            block_image = block[4]
-            block_x0, block_y0, block_x1, block_y1 = block[:4]
-            block_rect = fitz.Rect(block_x0, block_y0, block_x1, block_y1)
-
-            cell_text_list = str(block_image).strip().split('\n')
-
-            # 通用判断条件:独占一行不含1并且不含建议说明，不要最后两页，以及第一页的描述内容
-            block_common_condition = page_num + 1 not in [18, 19] \
-                                     and not str(block_image).strip().startswith('【') \
-                                     and str(block_image) not in ['1', '建议与说明']
-
-            # 检查部位独占一行的情况
-            # if block_x1 - block_x0 >= 530 and block_y1 - block_y0 >= 40:
-            #     # 提取矩形的文字给检查部位的变量
-            #     check_part = page.get_textbox(block_rect)
-
-            # 定义图片保存名称
-
-            for cell_text_index, cell_text in enumerate(cell_text_list):
-                # print(f'index-{cell_text_index}-value-{cell_text}')
-                # print('block_image', block_image)
-
-                if str(cell_text).strip() != '空' and (page_num + 1) not in [1, 18, 19] \
-                        and not str(cell_text).strip().startswith('【') \
-                        and str(cell_text) not in ['1', '建议与说明']:
-                    # print('cell_text', cell_text)
-                    # print('table_text', table_text)
-                    print('-' * 40)
-
-                if 'image' in cell_text:
-                    # 生成随机的 4 位正整数
-                    random_num = random.randint(1000, 9999)
-                    # rect = page.search_for(block_rect)
-                    pix = page.get_pixmap(matrix=fitz.Identity, colorspace=fitz.csRGB, clip=block_rect, alpha=False,
-                                          dpi=200)
-                    # print('Width:', pix.width)
-                    # print('Height:', pix.height)
-
-                    if pix and pix.n < 5 and pix.width >= 730 and pix.height >= 550:
-                        # print('Width:', pix.width)
-                        # print('Height:', pix.height)
-                        # 输出像素图
-                        # 定义图片保存路径
-                        image_file_dir = f'{check_part_dir_name}-{table_text}-{page_num + 1}-{block_index}-{random_num}-{dt}.png'
-                        # 保存图片
-                        print('image_file_dir', image_file_dir)
-                        # pix.save(image_file_dir)
-
-                    # print('文字:', block[4], '矩形宽度:', block_rect.width,
-                    #       '矩形高度:', block_rect.height, '坐标:', block_rect)
-                    # print('block_image', block_image)
-                    # print('block_rect', block_rect)
+        # for block_index, block in enumerate(block_list):
+        #     # 定义检查部位的文字
+        #     check_part = None
+        #
+        #     block_image = block[4]
+        #     block_x0, block_y0, block_x1, block_y1 = block[:4]
+        #     block_rect = fitz.Rect(block_x0, block_y0, block_x1, block_y1)
+        #
+        #     cell_text_list = str(block_image).strip().split('\n')
+        #
+        #     # 通用判断条件:独占一行不含1并且不含建议说明，不要最后两页，以及第一页的描述内容
+        #     block_common_condition = page_num + 1 not in [18, 19] \
+        #                              and not str(block_image).strip().startswith('【') \
+        #                              and str(block_image) not in ['1', '建议与说明']
+        #
+        #     # 检查部位独占一行的情况
+        #     # if block_x1 - block_x0 >= 530 and block_y1 - block_y0 >= 40:
+        #     #     # 提取矩形的文字给检查部位的变量
+        #     #     check_part = page.get_textbox(block_rect)
+        #
+        #     # 定义图片保存名称
+        #
+        #     for cell_text_index, cell_text in enumerate(cell_text_list):
+        #         # print(f'index-{cell_text_index}-value-{cell_text}')
+        #         # print('block_image', block_image)
+        #
+        #         if str(cell_text).strip() != '空' and (page_num + 1) not in [1, 18, 19] \
+        #                 and not str(cell_text).strip().startswith('【') \
+        #                 and str(cell_text) not in ['1', '建议与说明']:
+        #             # print('cell_text', cell_text)
+        #             # print('table_text', table_text)
+        #             print('-' * 40)
+        #
+        #         if 'image' in cell_text:
+        #             # 生成随机的 4 位正整数
+        #             random_num = random.randint(1000, 9999)
+        #             # rect = page.search_for(block_rect)
+        #             pix = page.get_pixmap(matrix=fitz.Identity, colorspace=fitz.csRGB, clip=block_rect, alpha=False,
+        #                                   dpi=200)
+        #             # print('Width:', pix.width)
+        #             # print('Height:', pix.height)
+        #
+        #             if pix and pix.n < 5 and pix.width >= 730 and pix.height >= 550:
+        #                 # print('Width:', pix.width)
+        #                 # print('Height:', pix.height)
+        #                 # 输出像素图
+        #                 # 定义图片保存路径
+        #                 image_file_dir = f'{check_part_dir_name}-{table_text}-{page_num + 1}-{block_index}-{random_num}-{dt}.png'
+        #                 # 保存图片
+        #                 # print('image_file_dir', image_file_dir)
+        #                 # pix.save(image_file_dir)
+        #
+        #             # print('文字:', block[4], '矩形宽度:', block_rect.width,
+        #             #       '矩形高度:', block_rect.height, '坐标:', block_rect)
+        #             # print('block_image', block_image)
+        #             # print('block_rect', block_rect)
 
     return table_text_list, check_part_text_list
 
