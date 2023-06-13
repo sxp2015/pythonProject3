@@ -10,7 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 TARGET_URL_1 = 'https://antispider4.scrape.center/css/app.654ba59e.css'
 TARGET_URL_2 = 'https://antispider4.scrape.center/'
 
-# 发送HTTP请求，获取响应内容
+# 发送HTTP请求，获取响应内容 ，这里从网站获取SSL的CA证书的时候要注意，保存的文件格式是 证书链文件，而不是单一证书文件
 response = requests.get(TARGET_URL_1, verify='./scrape.crt')
 
 # 定义正则表达式
