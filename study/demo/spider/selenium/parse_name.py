@@ -27,6 +27,7 @@ def parse_name(name_html: pq) -> str:
         items = sorted(items, key=lambda x: x['left'], reverse=False)  # 根据水平位置排序
         return ''.join(item['text'] for item in items)  # 拼接字符，得到姓名
 
+
 # 配置 ChromeOptions，将 Chrome 设置为无界面模式
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--headless')
