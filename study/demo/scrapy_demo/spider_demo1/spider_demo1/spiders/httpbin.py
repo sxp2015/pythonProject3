@@ -2,6 +2,8 @@ import scrapy
 from scrapy import Request
 from scrapy.http import FormRequest, JsonRequest
 
+from ..items import SpiderDemo1Item
+
 
 class HttpbinSpider(scrapy.Spider):
     name = "httpbin"
@@ -20,10 +22,14 @@ class HttpbinSpider(scrapy.Spider):
     # data = {'name': 'germey', 'age': '26'}
 
     def start_requests(self):
-        for offset in range(5):
-            get_url = self.start_urls[0] + f'?offset={offset}'
-            yield Request(url=get_url, headers=self.headers, cookies=self.cookies, callback=self.parse,
-                          meta={'offset': offset})
+        # for offset in range(5):
+        #     get_url = self.start_urls[0] + f'?offset={offset}'
+        #     yield Request(url=get_url, headers=self.headers, cookies=self.cookies, callback=self.parse,
+        #                   meta={'offset': offset})
+
+        for i in range(5):
+            url = self.start_urls[0] + f'?query={i}'
+            yield Request(url=url, headers=self.headers, cookies=self.cookies, callback=self.parse)
 
     # def start_requests(self):
     #     yield FormRequest(url=self.start_urls[0], headers=self.headers, cookies=self.cookies, callback=self.parse,
@@ -38,3 +44,5 @@ class HttpbinSpider(scrapy.Spider):
         print('response.headers:', response.headers)
         print('response.meta:', response.meta)
         print('response.request:', response.request)
+        item = SpiderDemo1Item(**response.json())
+        yield item

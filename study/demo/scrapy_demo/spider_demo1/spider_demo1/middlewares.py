@@ -49,8 +49,15 @@ class SpiderDemo1SpiderMiddleware:
         # that it doesn’t have a response associated.
 
         # Must return only requests (not items).
-        for r in start_requests:
-            yield r
+
+        for request in start_requests:
+            url = request.url
+            url += '&name=germey'
+            request = request.replace(url=url)
+            yield request
+
+        # for r in start_requests:
+        #     yield r
 
     def spider_opened(self, spider):
         spider.logger.info("Spider opened: %s" % spider.name)
@@ -101,3 +108,15 @@ class SpiderDemo1DownloaderMiddleware:
 
     def spider_opened(self, spider):
         spider.logger.info("Spider opened: %s" % spider.name)
+
+
+# class CustomizeSpiderMiddleware(object):
+#     # Not all methods need to be defined. If a method is not defined,
+#     # scrapy acts as if the middleware does not modify the
+#     # passed objects.
+#     def process_start_request(self, start_requests, spider):
+#         for request in start_requests:
+#             url = request.url
+#             url += '&name=germey'
+#             request = request.replace(url=url)
+#             yield request

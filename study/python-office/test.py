@@ -20,8 +20,8 @@ from study.utils.get_project_path import get_root_path
 
 # EXCEL转PDF
 # PROJECT_DIR = get_root_path()
-# excel_file_path = PROJECT_DIR + r'/study/excel/test.xlsx'
-# pdf_path = PROJECT_DIR + r'/study/pdf/test.pdf'
+# excel_file_path = PROJECT_DIR + r'/study/excel/StaffHistoricalJob.xlsx'
+# pdf_path = PROJECT_DIR + r'/study/pdf/StaffHistoricalJob.pdf'
 # office.excel.excel2pdf(excel_path=excel_file_path, pdf_path=pdf_path)
 
 # PPT转图片
