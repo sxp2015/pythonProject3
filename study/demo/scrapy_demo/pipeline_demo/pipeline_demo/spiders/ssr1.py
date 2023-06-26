@@ -1,5 +1,6 @@
 import scrapy
 from scrapy import Request
+from ..items import PipelineDemoItem
 
 
 class Ssr1Spider(scrapy.Spider):
@@ -21,4 +22,21 @@ class Ssr1Spider(scrapy.Spider):
             # print('Response:', response)
 
     def parse_detail(self, response):
-        print('Response:', response)
+        item = PipelineDemoItem()
+        item['name'] = response.xpath('//div[contains(@class,"item")]//h2/text()').get()
+        item['categories'] = response.xpath('//button[contains(@class,"category")]//span/text()').getall()
+        item['score'] = response.css('.score::text').re_first('[\d\.]+')
+        item['drama'] = response.css('.drama::text').get().strip()
+        item['directors'] = []
+        directors = response.xpath('//div[contains(@class,"directors")]//div[contains(@class,"director")]/text()')
+        for director in directors:
+            director_image = director.xpath('.//img[@class="image"]/@src').get()
+            director_name = director.xpath('.//p[contains(@class,"name")]/text()').get()
+            item['directors'].append({'image': director_image, 'name': director_name})
+        item['actors'] = []
+        actors = response.css('.actors .actor')
+        for actor in actors:
+            actor_image = actor.css('.actor .image::attr(src)').get()
+            actor_name = actor.css('.actor .name::text').get()
+            item['actors'].append({'image': actor_image, 'name': actor_name})
+        yield item
