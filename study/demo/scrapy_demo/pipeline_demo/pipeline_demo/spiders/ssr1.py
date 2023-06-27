@@ -26,10 +26,14 @@ class Ssr1Spider(scrapy.Spider):
         item['name'] = response.xpath('//div[contains(@class,"item")]//h2/text()').get()
         item['categories'] = response.xpath('//button[contains(@class,"category")]//span/text()').getall()
         item['score'] = response.css('.score::text').re_first('[\d\.]+')
-        item['drama'] = response.css('.drama::text').get().strip()
+        item['drama'] = response.css('.drama p::text').get().strip()
         item['directors'] = []
-        directors = response.xpath('//div[contains(@class,"directors")]//div[contains(@class,"director")]/text()')
+        directors = response.xpath('//div[contains(@class,"directors")]//div[contains(@class,"director")]')
+
+        directors2 = response.css('div.directors div.director div.el-card div.el-card__body p::text').getall()
+
         for director in directors:
+            # print('director:', director)
             director_image = director.xpath('.//img[@class="image"]/@src').get()
             director_name = director.xpath('.//p[contains(@class,"name")]/text()').get()
             item['directors'].append({'image': director_image, 'name': director_name})
