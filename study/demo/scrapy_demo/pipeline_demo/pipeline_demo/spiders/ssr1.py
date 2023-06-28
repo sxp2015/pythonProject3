@@ -30,8 +30,6 @@ class Ssr1Spider(scrapy.Spider):
         item['directors'] = []
         directors = response.xpath('//div[contains(@class,"directors")]//div[contains(@class,"director")]')
 
-        directors2 = response.css('div.directors div.director div.el-card div.el-card__body p::text').getall()
-
         for director in directors:
             # print('director:', director)
             director_image = director.xpath('.//img[@class="image"]/@src').get()
