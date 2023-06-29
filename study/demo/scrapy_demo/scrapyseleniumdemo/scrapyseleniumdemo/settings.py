@@ -54,6 +54,26 @@ DOWNLOADER_MIDDLEWARES = {
     'gerapy_selenium.downloadermiddlewares.SeleniumMiddleware': 543
 }
 CONCURRENT_REQUESTS = 6
+
+"""
+关闭Headless模式 settingspy增加如下代码
+GERAPY_SELENIUM_HEADLESS = True
+
+忽略HTTPS错误settingspy增加如下代码:
+GERAPY_SELENIUM_IGNORE_HTTPS_ERRORS = True
+
+开启WebDriver反屏蔽功能 settings.py增加如下代码:
+GERAPY_SELENIUM_PRETEND = False
+
+设置加载超时时间
+将GERAPY_SELENIUM_DOWNLOAD_TIMEOUT 设置为默认的秒数，默认等待30秒，例如设置超时60秒 settingspy增加如下代码:
+GERAPY_SELENIUM_DOWNLOAD_TIMEOUT = 60
+
+设置代理 可以借助于SeleniumRequest，设置proxy参数即可，例如:
+yield SeleniumRequest(start_url, callback=self.parse_index, wait_for=".item .name", proxy='127.0.0.1:7890')
+
+更多用法可以直接参考GerapySelenium的GitHub 仓库地址: https://github.com/Gerapy/GerapySelenium
+"""
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
 # EXTENSIONS = {
