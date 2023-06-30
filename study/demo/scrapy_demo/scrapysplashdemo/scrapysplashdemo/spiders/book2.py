@@ -1,6 +1,8 @@
+import random
+
 import scrapy, re
 from ..items import ScrapysplashdemoItem
-import logging, re
+import logging
 from gerapy_pyppeteer import PyppeteerRequest
 from scrapy import Request, Spider
 
@@ -13,7 +15,8 @@ class Book2Spider(scrapy.Spider):
     def start_requests(self):
         start_url = f'{self.start_urls[0]}/page/1'
         # yield scrapy.Request(url=start_url, callback=self.parse_index)
-        yield PyppeteerRequest(url=start_url, callback=self.parse_index, wait_for='.item .name')
+        yield PyppeteerRequest(url=start_url, callback=self.parse_index, wait_for='.item .name',
+                               screenshot={'type': 'png', 'fullPage': True})
 
     def parse_index(self, response):
         """
@@ -21,6 +24,8 @@ class Book2Spider(scrapy.Spider):
         :param response:
         :return:
         """
+
+
         items = response.css('.item')
         for item in items:
             href = item.css('.top a::attr(href)').get()
@@ -34,6 +39,10 @@ class Book2Spider(scrapy.Spider):
         next_page_num = max_page_num + 1
         next_url = f'{self.start_urls[0]}/page/{next_page_num}'
         # yield response.follow(next_url, callback=self.parse_index)
+
+        # with open(f'screenshot-{random.randint(1000, 9999)}.png', 'wb') as f:
+        #     f.write(response.meta['screenshot'].getbuffer())
+
         yield PyppeteerRequest(url=next_url, callback=self.parse_index, wait_for='.item .name')
 
     def parse_detail(self, response):

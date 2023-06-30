@@ -24,10 +24,14 @@ ROBOTSTXT_OBEY = False
 # 限制并发数
 CONCURRENT_REQUESTS = 3
 
-# 配置请求方式为无头模式
+# 配置请求方式为无头模式,即没有User-Agent，不建议开启，因为我们要模拟成正常浏览器
 GERAPY_PYPPETEER_HEADLESS = False
 # 如果Splash 是在远程服务器运行的，那么此处就应该配置为远程的地址
 
+# 忽略加载资源类型
+# Pyppteer可以自定义忽略特定的资源类型的加载，比如忽略图片文件、字体文件的加载，这样做可以大大提高爬取效率，常见类型如下
+# 比如我们想要在爬取过程中忽略图片、字体文件的加载，可以进行如下配置:
+GERAPY_PYPPETEER_IGNORE_RESOURCE_TYPES = ['image', 'font']
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 # CONCURRENT_REQUESTS = 32
 
