@@ -1,0 +1,575 @@
+2023-07-07 11:11:22 [scrapy.utils.log] INFO: Scrapy 2.9.0 started (bot: scrapyseleniumdemo)
+2023-07-07 11:11:22 [scrapy.utils.log] INFO: Versions: lxml 4.9.2.0, libxml2 2.9.12, cssselect 1.2.0, parsel 1.8.1, w3lib 2.1.1, Twisted 22.10.0, Python 3.9.13 (tags/v3.9.13:6de2ca5, May 17 2022, 16:36:42) [MSC v.1929 64 bit (AMD64)], pyOpenSSL 23.2.0 (OpenSSL 3.1.1 30 May 2023), cryptography 41.0.1, Platform Windows-10-10.0.19045-SP0
+2023-07-07 11:11:22 [scrapy.crawler] INFO: Overridden settings:
+{'BOT_NAME': 'scrapyseleniumdemo',
+ 'CONCURRENT_REQUESTS': 6,
+ 'FEED_EXPORT_ENCODING': 'utf-8',
+ 'LOG_FILE': 'logs\\scrapyseleniumdemo\\book\\f0bc25e31c7311ee9914b083fe7f0036.log',
+ 'NEWSPIDER_MODULE': 'scrapyseleniumdemo.spiders',
+ 'REQUEST_FINGERPRINTER_IMPLEMENTATION': '2.7',
+ 'ROBOTSTXT_OBEY': True,
+ 'SPIDER_MODULES': ['scrapyseleniumdemo.spiders'],
+ 'TWISTED_REACTOR': 'twisted.internet.asyncioreactor.AsyncioSelectorReactor'}
+2023-07-07 11:11:22 [asyncio] DEBUG: Using selector: SelectSelector
+2023-07-07 11:11:22 [scrapy.utils.log] DEBUG: Using reactor: twisted.internet.asyncioreactor.AsyncioSelectorReactor
+2023-07-07 11:11:22 [scrapy.utils.log] DEBUG: Using asyncio event loop: asyncio.windows_events._WindowsSelectorEventLoop
+2023-07-07 11:11:22 [scrapy.extensions.telnet] INFO: Telnet Password: 7e49bfaf5d590921
+2023-07-07 11:11:22 [scrapy.middleware] INFO: Enabled extensions:
+['scrapy.extensions.corestats.CoreStats',
+ 'scrapy.extensions.telnet.TelnetConsole',
+ 'scrapy.extensions.logstats.LogStats']
+2023-07-07 11:11:23 [scrapy.middleware] INFO: Enabled downloader middlewares:
+['scrapy.downloadermiddlewares.robotstxt.RobotsTxtMiddleware',
+ 'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware',
+ 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware',
+ 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware',
+ 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware',
+ 'gerapy_selenium.downloadermiddlewares.SeleniumMiddleware',
+ 'scrapy.downloadermiddlewares.retry.RetryMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware',
+ 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.RedirectMiddleware',
+ 'scrapy.downloadermiddlewares.cookies.CookiesMiddleware',
+ 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware',
+ 'scrapy.downloadermiddlewares.stats.DownloaderStats']
+2023-07-07 11:11:23 [scrapy.middleware] INFO: Enabled spider middlewares:
+['scrapy.spidermiddlewares.httperror.HttpErrorMiddleware',
+ 'scrapy.spidermiddlewares.offsite.OffsiteMiddleware',
+ 'scrapy.spidermiddlewares.referer.RefererMiddleware',
+ 'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware',
+ 'scrapy.spidermiddlewares.depth.DepthMiddleware']
+2023-07-07 11:11:23 [scrapy.middleware] INFO: Enabled item pipelines:
+[]
+2023-07-07 11:11:23 [scrapy.core.engine] INFO: Spider opened
+2023-07-07 11:11:23 [scrapy.extensions.logstats] INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)
+2023-07-07 11:11:23 [scrapy.extensions.telnet] INFO: Telnet console listening on 127.0.0.1:6023
+2023-07-07 11:11:23 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/robots.txt>
+2023-07-07 11:11:23 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:11:23 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:11:23 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:11:24 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:11:24 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 3048
+2023-07-07 11:11:27 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:11:28 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:11:30 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/robots.txt> (referer: None)
+2023-07-07 11:11:30 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/page/1>
+2023-07-07 11:11:30 [gerapy.selenium] DEBUG: selenium_meta {'wait_for': '.item .name', 'script': None, 'sleep': None, 'proxy': None, 'pretend': None, 'timeout': None, 'screenshot': None}
+2023-07-07 11:11:30 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:11:30 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:11:30 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:11:30 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 2304
+2023-07-07 11:11:33 [gerapy.selenium] DEBUG: waiting for .item .name
+2023-07-07 11:11:34 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:11:35 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:11:37 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/page/1> (referer: None)
+2023-07-07 11:11:37 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7952978>
+2023-07-07 11:11:37 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:11:37 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7067986>
+2023-07-07 11:11:37 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:11:37 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7153409>
+2023-07-07 11:11:37 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:11:37 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:11:37 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7154675>
+2023-07-07 11:11:37 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:11:37 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7154690>
+2023-07-07 11:11:37 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:11:37 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7154825>
+2023-07-07 11:11:37 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:11:37 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:11:37 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:11:37 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:11:37 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:11:37 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:11:37 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:11:37 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:11:37 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:11:37 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:11:37 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:11:37 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:11:37 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:11:37 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 16824
+2023-07-07 11:11:37 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:11:37 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:11:37 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 12616
+2023-07-07 11:11:37 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:11:37 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 9988
+2023-07-07 11:11:37 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 15656
+2023-07-07 11:11:38 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:11:38 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 9980
+2023-07-07 11:11:38 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:11:38 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 8840
+2023-07-07 11:11:42 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:11:42 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:11:42 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:11:43 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:11:43 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:11:43 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:11:43 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:11:43 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:11:44 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:11:44 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:11:44 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:11:44 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:11:46 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7154825> (referer: https://spa5.scrape.center/page/1)
+2023-07-07 11:11:46 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7062629>
+2023-07-07 11:11:46 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:11:46 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:11:46 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:11:46 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7067986> (referer: https://spa5.scrape.center/page/1)
+2023-07-07 11:11:46 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7952978> (referer: https://spa5.scrape.center/page/1)
+2023-07-07 11:11:46 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7154675> (referer: https://spa5.scrape.center/page/1)
+2023-07-07 11:11:46 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7063979>
+2023-07-07 11:11:46 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7065521>
+2023-07-07 11:11:46 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:11:46 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7065529>
+2023-07-07 11:11:46 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:11:46 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:11:46 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:11:46 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:11:46 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:11:46 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:11:46 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:11:46 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:11:46 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7154825>
+{'cover': None,
+ 'name': '我和你的笑忘书',
+ 'price': '21.80元',
+ 'score': '6.4',
+ 'tags': ['夏七夕', '笑忘书', '青春', '爱情', '让人心疼~']}
+2023-07-07 11:11:47 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7067986>
+{'cover': None, 'name': None, 'price': None, 'score': None, 'tags': []}
+2023-07-07 11:11:47 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7952978>
+{'cover': None,
+ 'name': 'Wonder',
+ 'price': 'USD 18.99',
+ 'score': '8.8',
+ 'tags': ['英文原版', '治愈系', '小说', '励志', '英语']}
+2023-07-07 11:11:47 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7154675>
+{'cover': None, 'name': None, 'price': None, 'score': None, 'tags': []}
+2023-07-07 11:11:47 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7154690> (referer: https://spa5.scrape.center/page/1)
+2023-07-07 11:11:47 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7067149>
+2023-07-07 11:11:47 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:11:47 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:11:47 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:11:47 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7154690>
+{'cover': None,
+ 'name': '王小波全集 第一卷',
+ 'price': '25.80元',
+ 'score': '8.3',
+ 'tags': ['王小波', '小说', '中国文学', '中国', '文学']}
+2023-07-07 11:11:47 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:11:47 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 5804
+2023-07-07 11:11:47 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:11:47 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 13508
+2023-07-07 11:11:47 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:11:47 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 13216
+2023-07-07 11:11:47 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:11:47 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 16968
+2023-07-07 11:11:47 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:11:47 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 336
+2023-07-07 11:11:48 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7153409> (referer: https://spa5.scrape.center/page/1)
+2023-07-07 11:11:48 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7067983>
+2023-07-07 11:11:48 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:11:48 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:11:48 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:11:48 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7153409>
+{'cover': None,
+ 'name': '龙枪编年史（全3册）',
+ 'price': '118.00元',
+ 'score': '8.8',
+ 'tags': ['奇幻', '龙枪', '西方奇幻', '小说', '魔幻']}
+2023-07-07 11:11:49 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:11:49 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 14724
+2023-07-07 11:11:50 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:11:50 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:11:50 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:11:51 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:11:51 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:11:51 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:11:52 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:11:52 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:11:52 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:11:52 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:11:53 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:11:53 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:11:55 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7065521> (referer: https://spa5.scrape.center/page/1)
+2023-07-07 11:11:55 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7163250>
+2023-07-07 11:11:55 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:11:55 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:11:55 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:11:55 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7065529> (referer: https://spa5.scrape.center/page/1)
+2023-07-07 11:11:55 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7440370>
+2023-07-07 11:11:55 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:11:55 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:11:55 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:11:55 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7062629> (referer: https://spa5.scrape.center/page/1)
+2023-07-07 11:11:55 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7564736>
+2023-07-07 11:11:55 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:11:55 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:11:55 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:11:55 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7067149> (referer: https://spa5.scrape.center/page/1)
+2023-07-07 11:11:55 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7658805>
+2023-07-07 11:11:55 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:11:55 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:11:55 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:11:55 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7065521>
+{'cover': None,
+ 'name': '银河帝国：基地',
+ 'price': '29.90元',
+ 'score': '9.0',
+ 'tags': ['科幻', '阿西莫夫', '基地系列', '科幻小说', '银河帝国']}
+2023-07-07 11:11:55 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7065529>
+{'cover': None,
+ 'name': '银河帝国2：基地与帝国',
+ 'price': '29.90元',
+ 'score': '9.0',
+ 'tags': ['科幻', '阿西莫夫', '基地系列', '小说', '科幻小说']}
+2023-07-07 11:11:55 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7063979> (referer: https://spa5.scrape.center/page/1)
+2023-07-07 11:11:55 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7698729>
+2023-07-07 11:11:55 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:11:55 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:11:55 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:11:55 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7062629>
+{'cover': None,
+ 'name': '越界言论（第3卷）',
+ 'price': '38.00元',
+ 'score': '8.3',
+ 'tags': ['许子东', '杂文', '随笔', '锵锵三人行', '中国']}
+2023-07-07 11:11:55 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7067149>
+{'cover': None,
+ 'name': '认知心理学及其启示',
+ 'price': '88.00元',
+ 'score': '8.8',
+ 'tags': ['心理学', '认知心理学', '认知科学', '心理', '认知']}
+2023-07-07 11:11:55 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7063979>
+{'cover': None,
+ 'name': '小学教材全解-四年级语文下',
+ 'price': '21.80元',
+ 'score': '7.3',
+ 'tags': ['小学教材全解-四年级下', '小学教材全解四年', '语文下', 'good', '没有']}
+2023-07-07 11:11:56 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7067983> (referer: https://spa5.scrape.center/page/1)
+2023-07-07 11:11:56 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7916054>
+2023-07-07 11:11:56 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:11:56 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:11:56 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:11:56 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:11:56 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:11:56 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7067983>
+{'cover': None,
+ 'name': '黎明之街',
+ 'price': '28.00元',
+ 'score': '7.2',
+ 'tags': ['东野圭吾', '日本', '推理', '東野圭吾', '小说']}
+2023-07-07 11:11:56 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 18352
+2023-07-07 11:11:56 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 1456
+2023-07-07 11:11:56 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:11:56 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:11:56 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:11:56 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 12864
+2023-07-07 11:11:56 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 11204
+2023-07-07 11:11:56 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 9000
+2023-07-07 11:11:56 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:11:56 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 10816
+2023-07-07 11:11:59 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:11:59 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:11:59 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:12:00 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:12:00 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:12:00 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:12:00 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:12:00 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:12:00 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:12:01 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:12:01 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:12:01 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:12:03 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7564736> (referer: https://spa5.scrape.center/page/1)
+2023-07-07 11:12:03 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/page/2>
+2023-07-07 11:12:03 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:12:03 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:12:03 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:12:03 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7658805> (referer: https://spa5.scrape.center/page/1)
+2023-07-07 11:12:03 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7163250> (referer: https://spa5.scrape.center/page/1)
+2023-07-07 11:12:03 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7440370> (referer: https://spa5.scrape.center/page/1)
+2023-07-07 11:12:03 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7698729> (referer: https://spa5.scrape.center/page/1)
+2023-07-07 11:12:03 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7564736>
+{'cover': None,
+ 'name': '那些年，我们一起追的女孩',
+ 'price': '28.00元',
+ 'score': '8.2',
+ 'tags': ['九把刀', '青春', '那些年，我们一起追的女孩', '小说', '台湾']}
+2023-07-07 11:12:03 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7658805>
+{'cover': None, 'name': None, 'price': None, 'score': None, 'tags': []}
+2023-07-07 11:12:03 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7163250>
+{'cover': None, 'name': None, 'price': None, 'score': None, 'tags': []}
+2023-07-07 11:12:03 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7440370>
+{'cover': None, 'name': None, 'price': None, 'score': None, 'tags': []}
+2023-07-07 11:12:03 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7698729>
+{'cover': None, 'name': None, 'price': None, 'score': None, 'tags': []}
+2023-07-07 11:12:03 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:12:03 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 844
+2023-07-07 11:12:03 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7916054> (referer: https://spa5.scrape.center/page/1)
+2023-07-07 11:12:04 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7916054>
+{'cover': None, 'name': None, 'price': None, 'score': None, 'tags': []}
+2023-07-07 11:12:05 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:12:06 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:12:08 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/page/2> (referer: https://spa5.scrape.center/page/1)
+2023-07-07 11:12:08 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7058064>
+2023-07-07 11:12:08 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7058461>
+2023-07-07 11:12:08 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:12:08 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7058564>
+2023-07-07 11:12:08 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:12:08 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7059909>
+2023-07-07 11:12:08 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:12:08 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7060186>
+2023-07-07 11:12:08 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:12:08 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7062628>
+2023-07-07 11:12:08 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:12:08 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:12:08 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:12:08 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:12:08 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:12:08 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:12:08 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:12:08 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:12:08 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:12:08 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:12:08 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:12:08 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:12:08 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:12:08 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:12:09 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:12:09 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 15136
+2023-07-07 11:12:09 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:12:09 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 13156
+2023-07-07 11:12:09 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:12:09 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 216
+2023-07-07 11:12:09 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:12:09 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:12:09 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 17412
+2023-07-07 11:12:09 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 3048
+2023-07-07 11:12:09 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:12:09 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 9104
+2023-07-07 11:12:12 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:12:12 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:12:12 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:12:12 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:12:12 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:12:13 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:12:13 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:12:13 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:12:13 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:12:13 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:12:14 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:12:14 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:12:15 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7059909> (referer: https://spa5.scrape.center/page/2)
+2023-07-07 11:12:15 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7007774>
+2023-07-07 11:12:15 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:12:15 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:12:15 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:12:15 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7060186> (referer: https://spa5.scrape.center/page/2)
+2023-07-07 11:12:15 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7008029>
+2023-07-07 11:12:15 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:12:15 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:12:15 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:12:15 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7059909>
+{'cover': None,
+ 'name': '南音 （上）',
+ 'price': '24.80元',
+ 'score': '7.4',
+ 'tags': ['笛安', '南音', '小说', '青春文学', '青春']}
+2023-07-07 11:12:15 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7060186>
+{'cover': None,
+ 'name': 'GOTH断掌事件',
+ 'price': '28.00元',
+ 'score': '8.2',
+ 'tags': ['乙一', '推理', '日本', '小说', '日系推理']}
+2023-07-07 11:12:16 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7058064> (referer: https://spa5.scrape.center/page/2)
+2023-07-07 11:12:16 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7015296>
+2023-07-07 11:12:16 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:12:16 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:12:16 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:12:16 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:12:16 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7058564> (referer: https://spa5.scrape.center/page/2)
+2023-07-07 11:12:16 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7047305>
+2023-07-07 11:12:16 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:12:16 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:12:16 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:12:16 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:12:16 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 18292
+2023-07-07 11:12:16 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 16876
+2023-07-07 11:12:16 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7058064>
+{'cover': None, 'name': None, 'price': None, 'score': None, 'tags': []}
+2023-07-07 11:12:16 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7058564>
+{'cover': None,
+ 'name': '第一辩手5·星河的泪痕',
+ 'price': '14.80元',
+ 'score': '6.8',
+ 'tags': ['星河的泪痕', '第一辩手5', '轻小说', '双子星罗', '第一辩手']}
+2023-07-07 11:12:16 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7062628> (referer: https://spa5.scrape.center/page/2)
+2023-07-07 11:12:16 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7047307>
+2023-07-07 11:12:16 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:12:16 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:12:16 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:12:16 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7062628>
+{'cover': None,
+ 'name': '许子东讲稿-张爱玲.郁达夫.香港文学-卷二',
+ 'price': '38.00元',
+ 'score': '8.4',
+ 'tags': ['许子东', '文学评论', '文学理论', '張愛玲', '文学']}
+2023-07-07 11:12:16 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:12:16 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 17356
+2023-07-07 11:12:16 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:12:16 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 17212
+2023-07-07 11:12:16 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7058461> (referer: https://spa5.scrape.center/page/2)
+2023-07-07 11:12:16 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7047308>
+2023-07-07 11:12:16 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:12:16 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:12:16 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:12:16 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7058461>
+{'cover': None,
+ 'name': '手绢上的花田',
+ 'price': 'CNY 17.00',
+ 'score': '9.2',
+ 'tags': ['安房直子', '童话', '日本文学', '儿童文学', '日本']}
+2023-07-07 11:12:16 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:12:16 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 18240
+2023-07-07 11:12:19 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:12:19 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:12:19 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:12:19 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:12:19 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:12:20 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:12:20 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:12:20 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:12:20 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:12:20 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 10516
+2023-07-07 11:12:20 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:12:21 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:12:22 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7007774> (referer: https://spa5.scrape.center/page/2)
+2023-07-07 11:12:22 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7053013>
+2023-07-07 11:12:22 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:12:22 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:12:22 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:12:22 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7007774>
+{'cover': None,
+ 'name': '没有意义就没有摇摆',
+ 'price': '28.00元',
+ 'score': '7.7',
+ 'tags': ['村上春树', '随笔', '音乐', '日本', '日本文学']}
+2023-07-07 11:12:22 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7015296> (referer: https://spa5.scrape.center/page/2)
+2023-07-07 11:12:22 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7055441>
+2023-07-07 11:12:22 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:12:22 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:12:22 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:12:22 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7008029> (referer: https://spa5.scrape.center/page/2)
+2023-07-07 11:12:22 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7056649>
+2023-07-07 11:12:22 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:12:22 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:12:22 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:12:22 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7015296>
+{'cover': None, 'name': None, 'price': None, 'score': None, 'tags': []}
+2023-07-07 11:12:22 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7008029>
+{'cover': None, 'name': None, 'price': None, 'score': None, 'tags': []}
+2023-07-07 11:12:22 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7047307> (referer: https://spa5.scrape.center/page/2)
+2023-07-07 11:12:22 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7056685>
+2023-07-07 11:12:22 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:12:22 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:12:22 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:12:22 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:12:22 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 13156
+2023-07-07 11:12:22 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7047307>
+{'cover': None,
+ 'name': '查理九世12·失落的海底城',
+ 'price': '15.00元',
+ 'score': '7.8',
+ 'tags': ['查理九世', '冒险', '雷欧幻像', '幻想', '科幻']}
+2023-07-07 11:12:22 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:12:22 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 9412
+2023-07-07 11:12:22 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:12:22 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 13300
+2023-07-07 11:12:22 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:12:22 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 17424
+2023-07-07 11:12:23 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7047308> (referer: https://spa5.scrape.center/page/2)
+2023-07-07 11:12:23 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7057187>
+2023-07-07 11:12:23 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:12:23 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:12:23 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:12:23 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7047308>
+{'cover': None,
+ 'name': '查理九世10·最后的古寺神佛',
+ 'price': '15.00元',
+ 'score': '7.7',
+ 'tags': ['查理九世', '最后的古寺神佛', '冒险', '雷欧幻像', '幻想']}
+2023-07-07 11:12:23 [scrapy.extensions.logstats] INFO: Crawled 32 pages (at 32 pages/min), scraped 29 items (at 29 items/min)
+2023-07-07 11:12:24 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:12:24 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:12:24 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 9524
+2023-07-07 11:12:25 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:12:27 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:12:27 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:12:27 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7047305> (referer: https://spa5.scrape.center/page/2)
+2023-07-07 11:12:27 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/detail/7057385>
+2023-07-07 11:12:27 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:12:27 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:12:27 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:12:27 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:12:27 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:12:27 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7047305>
+{'cover': None,
+ 'name': '查理九世11·冥府之船',
+ 'price': '15.00元',
+ 'score': '8.5',
+ 'tags': ['查理九世', '冥府之船', '冒险', '幻想', '魔幻']}
+2023-07-07 11:12:28 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:12:28 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 10156
+2023-07-07 11:12:28 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:12:28 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:12:28 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:12:28 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:12:28 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:12:29 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:12:30 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7055441> (referer: https://spa5.scrape.center/page/2)
+2023-07-07 11:12:30 [gerapy.selenium] DEBUG: processing request <GET https://spa5.scrape.center/page/3>
+2023-07-07 11:12:30 [gerapy.selenium] DEBUG: selenium_meta {}
+2023-07-07 11:12:30 [selenium.webdriver.common.service] DEBUG: driver not found in PATH, trying Selenium Manager
+2023-07-07 11:12:30 [selenium.webdriver.common.selenium_manager] DEBUG: Executing: C:\Users\admin\PycharmProjects\pythonProject3\venv\lib\site-packages\selenium\webdriver\common\windows\selenium-manager.exe --browser chrome
+2023-07-07 11:12:30 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7055441>
+{'cover': None,
+ 'name': '罗马人的故事1',
+ 'price': '36.00元',
+ 'score': '8.8',
+ 'tags': ['历史', '罗马', '盐野七生', '古罗马', '世界史']}
+2023-07-07 11:12:30 [selenium.webdriver.common.selenium_manager] DEBUG: Using driver at: C:\Users\admin\.cache\selenium\chromedriver\win32\114.0.5735.90\chromedriver.exe
+2023-07-07 11:12:30 [selenium.webdriver.common.service] DEBUG: Started executable: `chromedriver` in a child process with pid: 14188
+2023-07-07 11:12:31 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7056649> (referer: https://spa5.scrape.center/page/2)
+2023-07-07 11:12:31 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7057187> (referer: https://spa5.scrape.center/page/2)
+2023-07-07 11:12:31 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7053013> (referer: https://spa5.scrape.center/page/2)
+2023-07-07 11:12:31 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7056649>
+{'cover': None,
+ 'name': '歧路',
+ 'price': '26.80元',
+ 'score': '8.6',
+ 'tags': ['耽美', '脉脉', '渥丹', '小说', '细腻']}
+2023-07-07 11:12:31 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7057187>
+{'cover': None,
+ 'name': '陶庵梦忆',
+ 'price': '56.00元',
+ 'score': '9.5',
+ 'tags': ['张岱', '古典文学', '明末小品文', '散文随笔', '随笔']}
+2023-07-07 11:12:31 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7053013>
+{'cover': None,
+ 'name': '魔法科高校の劣等生〈3〉',
+ 'price': 'JPY 683',
+ 'score': '7.9',
+ 'tags': ['轻小说', '★轻小说★', '轻轻', '日本']}
+2023-07-07 11:12:31 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://spa5.scrape.center/detail/7056685> (referer: https://spa5.scrape.center/page/2)
+2023-07-07 11:12:31 [scrapy.core.scraper] DEBUG: Scraped from <200 https://spa5.scrape.center/detail/7056685>
+{'cover': None,
+ 'name': '天黑以后',
+ 'price': '29.50元',
+ 'score': '7.5',
+ 'tags': ['村上春树', '日本文学', '日本', '小说', '天黑以后']}
+2023-07-07 11:12:32 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:12:33 [gerapy.selenium] DEBUG: sleep for 1s
+2023-07-07 11:12:33 [gerapy.selenium] DEBUG: close selenium
+2023-07-07 11:12:34 [gerapy.selenium] DEBUG: close selenium

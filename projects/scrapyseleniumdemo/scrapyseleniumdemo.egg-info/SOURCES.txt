@@ -1,0 +1,13 @@
+setup.py
+scrapyseleniumdemo/__init__.py
+scrapyseleniumdemo/items.py
+scrapyseleniumdemo/middlewares.py
+scrapyseleniumdemo/pipelines.py
+scrapyseleniumdemo/settings.py
+scrapyseleniumdemo.egg-info/PKG-INFO
+scrapyseleniumdemo.egg-info/SOURCES.txt
+scrapyseleniumdemo.egg-info/dependency_links.txt
+scrapyseleniumdemo.egg-info/entry_points.txt
+scrapyseleniumdemo.egg-info/top_level.txt
+scrapyseleniumdemo/spiders/__init__.py
+scrapyseleniumdemo/spiders/book.py
