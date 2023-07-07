@@ -1,0 +1,15 @@
+setup.py
+project.egg-info/PKG-INFO
+project.egg-info/SOURCES.txt
+project.egg-info/dependency_links.txt
+project.egg-info/entry_points.txt
+project.egg-info/top_level.txt
+scrapytutorial/__init__.py
+scrapytutorial/extensions.py
+scrapytutorial/items.py
+scrapytutorial/middlewares.py
+scrapytutorial/pipelines.py
+scrapytutorial/server.py
+scrapytutorial/settings.py
+scrapytutorial/spiders/__init__.py
+scrapytutorial/spiders/quotes.py

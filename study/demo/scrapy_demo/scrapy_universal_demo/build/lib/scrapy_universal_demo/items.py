@@ -6,11 +6,12 @@
 import scrapy
 
 
-class ScrapyseleniumdemoItem(scrapy.Item):
+class ScrapyUniversalDemoItem(scrapy.Item):
     # define the fields for your item here like:
     name = scrapy.Field()
-    tags = scrapy.Field()
-    score = scrapy.Field()
     cover = scrapy.Field()
-    price = scrapy.Field()
+    categories = scrapy.Field()
+    published_at = scrapy.Field()
+    drama = scrapy.Field()
+    score = scrapy.Field()
 

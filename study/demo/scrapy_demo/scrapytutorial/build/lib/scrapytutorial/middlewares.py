@@ -7,12 +7,9 @@ from scrapy import signals
 
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
-from scrapy.http import HtmlResponse
-from selenium import webdriver
-import time
 
 
-class ScrapyseleniumdemoSpiderMiddleware:
+class ScrapytutorialSpiderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the spider middleware does not modify the
     # passed objects.
@@ -59,7 +56,7 @@ class ScrapyseleniumdemoSpiderMiddleware:
         spider.logger.info("Spider opened: %s" % spider.name)
 
 
-class ScrapyseleniumdemoDownloaderMiddleware:
+class ScrapytutorialDownloaderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the downloader middleware does not modify the
     # passed objects.
@@ -74,19 +71,14 @@ class ScrapyseleniumdemoDownloaderMiddleware:
     def process_request(self, request, spider):
         # Called for each request that goes through the downloader
         # middleware.
+
         # Must either:
         # - return None: continue processing this request
         # - or return a Response object
         # - or return a Request object
         # - or raise IgnoreRequest: process_exception() methods of
         #   installed downloader middleware will be called
-        url = request.url
-        browser = webdriver.Chrome()
-        browser.get(url)
-        time.sleep(5)
-        html = browser.page_source
-        browser.close()
-        return HtmlResponse(url=url, body=html, encoding='utf-8', request=request, status=200)
+        return None
 
     def process_response(self, request, response, spider):
         # Called with the response returned from the downloader.

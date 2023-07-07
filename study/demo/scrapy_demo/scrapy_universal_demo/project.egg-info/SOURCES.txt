@@ -1,0 +1,15 @@
+setup.py
+project.egg-info/PKG-INFO
+project.egg-info/SOURCES.txt
+project.egg-info/dependency_links.txt
+project.egg-info/entry_points.txt
+project.egg-info/top_level.txt
+scrapy_universal_demo/__init__.py
+scrapy_universal_demo/items.py
+scrapy_universal_demo/middlewares.py
+scrapy_universal_demo/pipelines.py
+scrapy_universal_demo/read_json_utils.py
+scrapy_universal_demo/settings.py
+scrapy_universal_demo/spiders/__init__.py
+scrapy_universal_demo/spiders/movies.py
+scrapy_universal_demo/spiders/universal.py
