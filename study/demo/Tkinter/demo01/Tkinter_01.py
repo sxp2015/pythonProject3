@@ -1,4 +1,5 @@
 import tkinter
+from tkinter import *
 
 # 创建根窗口
 container = tkinter.Tk()
@@ -36,6 +37,12 @@ container.config(bg='#087360')
 
 # 设置LOGO图标
 container.iconbitmap("logo/logo.ico")
+
+
+# 创建一个Label标签
+label = Label(container, text='郴州建活塑胶科技有限公司', bg='#ffffff', fg='#087360',anchor='nw')
+
+label.pack()
 
 # 输出版本号
 print('version', tkinter.TkVersion)
