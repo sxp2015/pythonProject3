@@ -35,6 +35,10 @@ digit = Label(container, bg='yellow', fg='blue', height=3, width=10, font='Helve
 # 将标签添加到窗口中的合适位置
 digit.pack()
 
+# 输出所有可传的参数
+for key in digit.keys():
+    print('args:', key + '\n')
+
 # 运行计数器函数，传入标签作为参数
 run_counter(digit)
 
