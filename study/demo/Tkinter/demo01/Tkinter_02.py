@@ -42,5 +42,9 @@ for key in digit.keys():
 # 运行计数器函数，传入标签作为参数
 run_counter(digit)
 
+
+# 定义个按钮关闭对话框
+Button(container, text="关闭计时", command=container.destroy).pack(padx=5)
+
 # 进入 tkinter 的主循环，等待事件的发生
 container.mainloop()
