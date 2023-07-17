@@ -14,6 +14,17 @@ balls = ['football', 'basketball', 'tennis ball', 'volleyball']
 # selectmode=MULTIPLE 多选模式  selectmode=EXTENDED 框选模式
 lb = Listbox(window, selectmode=EXTENDED)
 
+
+def return_index():
+    index_list = lb.curselection()
+    for index in index_list:
+        print("index ==", lb.get(index))
+        # 所选项目，是否包含指定索引，返回布尔值
+        print("所选项是否包含第2项索引值：", lb.selection_includes(1))
+
+
+btn = Button(window, text="传回选取项目的索引值，并是否包含指定索引", command=return_index)
+
 for fruit in fruits:
     # END 索引，从后面插入
     lb.insert(END, fruit)
@@ -23,6 +34,7 @@ for ball in balls:
     lb.insert(ACTIVE, ball)
 
 lb.pack(padx=5, pady=10)
+btn.pack(padx=5, pady=10)
 
 # 输出列表数量长度
 print("size:", lb.size())
