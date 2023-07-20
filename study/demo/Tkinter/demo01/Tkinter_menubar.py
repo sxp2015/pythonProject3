@@ -62,6 +62,14 @@ def paste_content():
     messagebox.showinfo('提示', f'鼠标右键 粘贴内容{time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())}')
 
 
+# 显示状态的方法
+def toggle_status():
+    if var_checked.get():
+        show_status_label.pack(fill=X, side=BOTTOM)
+    else:
+        show_status_label.pack_forget()
+
+
 # 顶层菜单
 menubar = Menu(window)
 
@@ -73,16 +81,30 @@ help_menu = Menu(menubar, tearoff=0)
 edit_menu = Menu(menubar, tearoff=False)
 # 在编辑菜单中，创建一个【查找】子菜单
 search_menu = Menu(edit_menu, tearoff=0)
+
+# 定义状态是否选中的变量
+var_checked = BooleanVar()
+
+# 状态标签文本变量
+status_text = StringVar()
+status_text.set('显示')
+
+# 状态菜单
+status_menu = Menu(menubar, tearoff=0)
+# 显示当前状态的标签
+show_status_label = Label(window, textvariable=status_text, font=('微软雅黑', 18, 'bold'), background='yellow')
+
 # 顶层菜单关联下级的文件级联菜单
 menubar.add_cascade(label='文件(F)', menu=file_menu, underline=3)
 menubar.add_cascade(label='编辑(E)', menu=edit_menu, underline=3)
 menubar.add_cascade(label='帮助(H)', menu=help_menu, underline=3)
+menubar.add_cascade(label='状态(S)', menu=status_menu, underline=3)
 # 级联菜单添加命令菜单
 file_menu.add_command(label='打开', command=open_file, underline=3, accelerator='Ctrl+O')
 file_menu.add_command(label='保存', command=save_file, accelerator='Ctrl+S')
 file_menu.add_command(label='另存为', command=save_as_file, accelerator='Ctrl+Shift+S')
 
-# 添加子菜单
+# 编辑菜单的级联菜单
 edit_menu.add_command(label='查找', command=find_content, accelerator='Ctrl+F')
 edit_menu.add_command(label='替换', command=replace_content, accelerator='Ctrl+R')
 
@@ -91,9 +113,11 @@ edit_menu.add_command(label='替换', command=replace_content, accelerator='Ctrl
 edit_menu.add_cascade(label='查找方式', menu=search_menu)
 search_menu.add_command(label='全文查找', command=find_content_by_doc)
 search_menu.add_command(label='目录查找', command=find_content_by_dir)
-
+# 帮助菜单
 help_menu.add_command(label='查看帮助')
 help_menu.add_command(label='关于软件')
+# 状态菜单级联
+status_menu.add_checkbutton(label='显示状态', command=toggle_status, variable=var_checked)
 
 # 鼠标右键菜单
 popup_menu = Menu(window, tearoff=0)
