@@ -7,6 +7,24 @@ window = Tk()
 window.title('树状结构视图案例')
 window.geometry('600x400')
 
+# 定义一个文本变量，用于在Label中显示当前选中的是哪一项
+checked_item = StringVar()
+
+
+# 定义一个方法，用于获得当前选中控件中的内容
+def tree_selected(event):
+    # 获得当前选中的控件对象
+    widget_object = event.widget
+    # 获得选中项
+    item_selected = widget_object.selection()[0]
+    # 获得图标栏内容
+    col_1 = widget_object.item(item_selected, 'text')
+    # 获得索引栏为0的位置的内容
+    col_2 = widget_object.item(item_selected, 'values')[0]
+    # 组合内容
+    checked_item.set(col_1 + ' ：' + col_2)
+
+
 # show='headings' 不显示图标栏 也就是 text="湖南省"
 tree = Treeview(window, columns=('cities', 'peoples'))
 
@@ -36,10 +54,16 @@ for key in stateCity.keys():
         tree.insert('', index=row_count, text=key, values=stateCity[key], tags=('even_color',))
     row_count += 1
 
-# 格式化栏位
+# 格式化栏位,设置宽度和对齐方式
 tree.column('#0', width=100, anchor=CENTER)
 tree.column('#1', width=150, anchor=CENTER)
 tree.column('#2', width=150, anchor=CENTER)
-
+# 给树状结构图绑定和添加一个选择事件
+tree.bind('<<TreeviewSelect>>', tree_selected)
 tree.pack()
+
+# 建立状态栏
+label = Label(window, textvariable=checked_item, relief=GROOVE)
+label.pack(fill=X, side=BOTTOM)
+
 window.mainloop()
